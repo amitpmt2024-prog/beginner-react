@@ -1,7 +1,11 @@
 import { useState } from 'react';
+interface CounterButtonProps {
+  increment: () => void;
+  decrement: () => void;
+}
 
 // increment and decrement are the props of the CounterButton component
-function CounterButton({increment,decrement}) {
+function CounterButton({increment,decrement}:CounterButtonProps) {
   return (
     <div>
 <button onClick={increment}>Increment</button>
