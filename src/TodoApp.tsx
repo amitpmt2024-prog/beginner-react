@@ -1,24 +1,23 @@
-import React from 'react'
 import { useState } from 'react'
 
 function TodoApp () {
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('')
 
-function handleChange(e){
-  setInputValue(e.target.value)
+function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  setInputValue(e.target.value);
 }
 
-function handleSubmit(e){
-  e.preventDefault()
-  setTodos([...todos, inputValue])
-  setInputValue('')
+function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  e.preventDefault(); // works only if button is in a <form>
+  setTodos([...todos, inputValue]);
+  setInputValue('');
 }
 
-function handleDelete(index){
+function handleDelete(index:number){
   const newTodos = [...todos];
   newTodos.splice(index,1);
-  setTodos([newTodos]);
+  setTodos(newTodos);
 }
   return (
     <div>
