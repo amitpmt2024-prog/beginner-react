@@ -1,9 +1,20 @@
+import { Link, Route, Routes } from "react-router";
+import About from "./About";
+import Contact from "./Contact";
+
 const Navbar = () => {
     return ( <nav className="navbar">
     <h1>Blog</h1>
-    <div className="links">
-        <a href="/">Home</a>
-        <a href="create" style={{color:"white",backgroundColor:"red", borderRadius:"8px"}}>New Blog</a>
+     <div>
+      <nav>
+        <Link to="/about">About</Link> 
+        <Link to="/contact">Contact</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
     </div>
     </nav> );
 }
