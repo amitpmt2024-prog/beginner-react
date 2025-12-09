@@ -1,26 +1,12 @@
-// import { Routes, Route } from 'react-router-dom'
-// import Counter from './Counter'
-// import Whether from './Whether'
-// import TodoApp  from './TodoApp'
-// import Navbar from './components/Navbar'
-// import Home from './components/Home'
-// import About from './components/About'
-// import Contact from './components/Contact'
 import './App.css'
-import SearchBar from './components/SearchBar'
+import Home from './pages/Home'
+import "../node_modules/font-awesome/css/font-awesome.min.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
     <div className='App'>
-      < SearchBar />
-      {/* <Navbar />
-      <div className='content'>
-        <Routes>
-          <Route path="/" element={<><Home /><Counter /></>} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </div> */}
+      < Home />
     </div>
   )
 }
