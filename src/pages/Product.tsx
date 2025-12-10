@@ -4,27 +4,8 @@ import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Marquee from "react-fast-marquee";
+import type { Product,ProductProps,SimilarProductProps } from "../types/Product.type";
 
-interface Product {
-    id?: string,
-    title?: string,
-    price?: number,
-    description?: string,
-    category?: string,
-    image?: string,
-    rating?: {
-        rate?: number,
-        count?: number
-    }
-}
-
-interface ProductProps {
-  product: Product;
-}
-
-interface similarProductProps {
-  similarProducts: Product[];
-}
 
 const Loading = () => {
         return <>
@@ -101,7 +82,7 @@ const Loading = () => {
         );
     };
     
-    const SimilarProduct = ({similarProducts}: similarProductProps) => {
+    const SimilarProduct = ({similarProducts}: SimilarProductProps) => {
         return <>
             <div className="py-4 my-4">
                 <div className="d-flex">

@@ -4,19 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
-
-interface Product {
-    id: string,
-    title: string,
-    price: number,
-    description: string,
-    category: string,
-    image: string,
-    rating: {
-        rate: number,
-        count: number
-    }
-}
+import type { Product,ShowProductsProps } from "../types/Product.type";
 
 const Loading = () => {
     return (
@@ -44,13 +32,6 @@ const Loading = () => {
             </div>
         </>
     )
-}
-
-interface ShowProductsProps {
-    filter: Product[];
-    data: Product[];
-    setFilter: (products: Product[]) => void;
-    filterProduct: (cat: string) => void;
 }
 
 const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsProps) => {
@@ -105,10 +86,10 @@ const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsPr
                             />
                             <div className="card-body">
                                 <h5 className="card-title">
-                                    {product.title.substring(0, 12)}...
+                                    {product?.title?.substring(0, 12)}...
                                 </h5>
                                 <p className="card-text">
-                                    {product.description.substring(0, 90)}...
+                                    {product?.description?.substring(0, 90)}...
                                 </p>
                             </div>
                             <ul className="list-group list-group-flush">
