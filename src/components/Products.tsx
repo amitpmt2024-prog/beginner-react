@@ -136,8 +136,6 @@ const Products = () => {
     const [filter, setFilter] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // const dispatch = useDispatch()
-
     useEffect(() => {
         const controller = new AbortController();
 

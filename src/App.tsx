@@ -11,11 +11,14 @@ import ProductsPage from './pages/ProductsPage';
 import PageNotFound from './pages/PageNotFound';
 import ScrollToTop from './components/scrollToTop';
 import Product from './pages/Product';
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop>
+        <Provider store={store}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -31,6 +34,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/product/*" element={<PageNotFound />} /> */}
         </Routes>
+        </Provider>
       </ScrollToTop>
      </BrowserRouter>
   )
