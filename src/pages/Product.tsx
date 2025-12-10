@@ -6,43 +6,27 @@ import Skeleton from "react-loading-skeleton";
 import Marquee from "react-fast-marquee";
 
 interface Product {
-    id: string,
-    title: string,
-    price: number,
-    description: string,
-    category: string,
-    image: string,
-    rating: {
-        rate: number,
-        count: number
+    id?: string,
+    title?: string,
+    price?: number,
+    description?: string,
+    category?: string,
+    image?: string,
+    rating?: {
+        rate?: number,
+        count?: number
     }
 }
 
-const Product = () => {
-    const { id } = useParams();
-    const [product, setProduct] = useState([]);
-    const [similarProducts, setSimilarProduct] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [loading2, setLoading2] = useState(false);
+interface ProductProps {
+  product: Product;
+}
 
-    useEffect(() => {
-        const getProducts = async () => {
-            setLoading(true);
-            setLoading2(true);
-            const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-            const data = await response.json();
-            setProduct(data);
-            setLoading(false);
-            const response2 = await fetch(`https://fakestoreapi.com/products/category/${data.category}`);
-            const data2 = await response2.json();
-            setSimilarProduct(data2);
-            setLoading2(false);
-        };
+interface similarProductProps {
+  similarProducts: Product[];
+}
 
-        getProducts();
-    }, [id]);
-
-    const Loading = () => {
+const Loading = () => {
         return <>
             <div className="container my-5 py-2">
                 <div className="row">
@@ -63,7 +47,7 @@ const Product = () => {
         </>
     }
 
-    const ShowProduct = () => {
+    const ShowProduct = ({ product }: ProductProps) => {
         return (<>
             <div className="container my-5 py-2">
                 <div className="row">
@@ -116,7 +100,8 @@ const Product = () => {
             </>
         );
     };
-    const SimilarProduct = () => {
+    
+    const SimilarProduct = ({similarProducts}: similarProductProps) => {
         return <>
             <div className="py-4 my-4">
                 <div className="d-flex">
@@ -126,7 +111,7 @@ const Product = () => {
                                 <div key={item.id} className="card mx-4 text-center">
                                     <img className="card-img-top p-3" src={item?.image} alt="Card" height="300px" width="300px" />
                                     <div className="card-body">
-                                        <h5 className="card-title"> {item.title.substring(0, 15)}...</h5>
+                                        <h5 className="card-title"> {item?.title?.substring(0, 15)}...</h5>
                                     </div>
                                     <div className="card-body">
                                         <Link to={"/product/" + item.id} className="btn btn-dark m-1">
@@ -149,16 +134,40 @@ const Product = () => {
         </>
     }
 
+const Product = () => {
+    const { id } = useParams();
+    const [product, setProduct] = useState<Product>({});
+    const [similarProducts, setSimilarProduct] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
+
+    useEffect(() => {
+        const getProducts = async () => {
+            setLoading(true);
+            setLoading2(true);
+            const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+            const data = await response.json();
+            setProduct(data);
+            setLoading(false);
+            const response2 = await fetch(`https://fakestoreapi.com/products/category/${data.category}`);
+            const data2 = await response2.json();
+            setSimilarProduct(data2);
+            setLoading2(false);
+        };
+
+        getProducts();
+    }, [id]);
+
     return (
         <>
             <Navbar />
             <div className="container">
-                <div className="row">{loading ? <Loading /> : <ShowProduct />}</div>
+                <div className="row">{loading ? <Loading /> : <ShowProduct product={product} />}</div>
                 <div className="row my-5 py-5">
                     <div className="d-none d-md-block">
                         <h2 className="">You may also Like</h2>
                         <Marquee pauseOnClick={true} pauseOnHover={true} speed={50}>
-                            {loading2 ? <Loading2 /> : <SimilarProduct />}
+                            {loading2 ? <Loading2 /> : <SimilarProduct similarProducts={similarProducts}/>}
                         </Marquee>
                     </div>
                 </div>
