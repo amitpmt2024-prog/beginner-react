@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductsPage from './pages/ProductsPage';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
@@ -18,15 +19,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
            <Route path="/product" element={<ProductsPage />} />
+           <Route path="*" element={<PageNotFound />} /> 
           {/* <Route path="/product" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="*" element={<PageNotFound />} />
           <Route path="/product/*" element={<PageNotFound />} /> */}
         </Routes>
   )
