@@ -1,16 +1,4 @@
-interface Product {
-    id?: string,
-    title?: string,
-    price?: number,
-    description?: string,
-    category?: string,
-    image?: string,
-    rating?: {
-        rate?: number,
-        count?: number
-    }
-}
-
+import type { Product } from "../../types/Product.type"
 
 // For Add Item to Cart
 export const addCart = (product:Product) =>{

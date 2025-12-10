@@ -115,7 +115,7 @@ const Loading = () => {
         </>
     }
 
-const Product = () => {
+const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState<Product>({});
     const [similarProducts, setSimilarProduct] = useState([]);
@@ -158,4 +158,4 @@ const Product = () => {
     );
 }
 
-export default Product;
+export default ProductDetails;

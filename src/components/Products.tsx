@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
-import type { Product,ShowProductsProps } from "../types/Product.type";
+import type { Product, ShowProductsProps } from "../types/Product.type";
+import { addCart } from "../redux/action";
+import { useDispatch } from "react-redux";
 
 const Loading = () => {
     return (
@@ -34,7 +35,13 @@ const Loading = () => {
     )
 }
 
+
 const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsProps) => {
+    const dispatch = useDispatch();
+    const addProduct = (product: Product) => {
+        dispatch(addCart(product));
+    };
+
     return (
         <>
             <div className="buttons text-center py-5">
@@ -108,7 +115,7 @@ const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsPr
                                     className="btn btn-dark m-1"
                                     onClick={() => {
                                         toast.success("Added to cart");
-                                        // addProduct(product);
+                                        addProduct(product);
                                     }}
                                 >
                                     Add to Cart
@@ -144,7 +151,7 @@ const Products = () => {
                 setData(json);
                 setFilter(json);
                 setLoading(false);
-            } catch (error:unknown) {
+            } catch (error: unknown) {
                 if (error instanceof Error && error.name === "AbortError") {
                     console.log("Request aborted");
                 }
