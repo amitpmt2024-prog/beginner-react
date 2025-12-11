@@ -17,7 +17,7 @@ const handleCart = (state = getInitialCart(), action:{type: string, payload: Pro
       if (exist) {
         // Increase the quantity
         updatedCart = state.map((x:Product) =>
-          x.id === product.id ? { ...x, qty: x.qty + 1 } : x
+          x.id === product.id ? { ...x, qty: x.qty || 0 + 1 } : x
         );
       } else {
         updatedCart = [...state, { ...product, qty: 1 }];
@@ -32,7 +32,7 @@ const handleCart = (state = getInitialCart(), action:{type: string, payload: Pro
         updatedCart = state.filter((x:Product) => x.id !== exist2.id);
       } else {
         updatedCart = state.map((x:Product) =>
-          x.id === product.id ? { ...x, qty: x.qty - 1 } : x
+          x.id === product.id ? { ...x, qty: x.qty || 0 - 1 } : x
         );
       }
       // Update localStorage
