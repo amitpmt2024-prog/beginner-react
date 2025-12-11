@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { Product } from "../../types/Product.type";
 
 // Retrieve initial state from localStorage if available
@@ -7,8 +7,7 @@ const getInitialCart = () => {
   return storedCart ? JSON.parse(storedCart) : [];
 };
 
-const handleCart = (state = getInitialCart(), action:any) => {
-  console.log('aaaaaa',state,action);
+const handleCart = (state = getInitialCart(), action:{type: string, payload: Product}) => {
   const product = action.payload;
   let updatedCart;
 
@@ -17,7 +16,7 @@ const handleCart = (state = getInitialCart(), action:any) => {
       { const exist = state.find((x:Product) => x.id === product.id);
       if (exist) {
         // Increase the quantity
-        updatedCart = state.map((x:any) =>
+        updatedCart = state.map((x:Product) =>
           x.id === product.id ? { ...x, qty: x.qty + 1 } : x
         );
       } else {
@@ -30,9 +29,9 @@ const handleCart = (state = getInitialCart(), action:any) => {
     case "DELITEM":
       { const exist2 = state.find((x:Product) => x.id === product.id);
       if (exist2.qty === 1) {
-        updatedCart = state.filter((x:any) => x.id !== exist2.id);
+        updatedCart = state.filter((x:Product) => x.id !== exist2.id);
       } else {
-        updatedCart = state.map((x:any) =>
+        updatedCart = state.map((x:Product) =>
           x.id === product.id ? { ...x, qty: x.qty - 1 } : x
         );
       }

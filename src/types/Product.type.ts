@@ -5,6 +5,7 @@ export interface Product {
     description?: string,
     category?: string,
     image?: string,
+    qty: number,
     rating?: {
         rate?: number,
         count?: number
