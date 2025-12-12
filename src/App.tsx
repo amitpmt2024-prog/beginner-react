@@ -14,6 +14,7 @@ import Product from './pages/Product';
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import Cart from './pages/Cart';
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/product/*" element={<PageNotFound />} /> */}
         </Routes>
+        <Toaster />
         </Provider>
       </ScrollToTop>
      </BrowserRouter>
