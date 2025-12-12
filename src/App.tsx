@@ -13,6 +13,7 @@ import ScrollToTop from './components/scrollToTop';
 import Product from './pages/Product';
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/product" element={<ProductsPage />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route path="/cart" element={< Cart/>} />
           {/* <Route path="/product" element={<Products />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
