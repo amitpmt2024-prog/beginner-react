@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Marquee from "react-fast-marquee";
 import type { Product,ProductProps,SimilarProductProps } from "../types/Product.type";
+import React from "react";
+import { addCart } from "../redux/action";
+import { useDispatch } from "react-redux";
 
 
 const Loading = () => {
@@ -83,13 +86,19 @@ const Loading = () => {
     };
     
     const SimilarProduct = ({similarProducts}: SimilarProductProps) => {
+    const dispatch = useDispatch();
+    const addProduct = (product: Product) => {
+        dispatch(addCart(product));
+    };
+
         return <>
             <div className="py-4 my-4">
                 <div className="d-flex">
                     {
                         similarProducts?.map((item: Product) => {
                             return <>
-                                <div key={item.id} className="card mx-4 text-center">
+                            <React.Fragment key={item?.id}>
+                                <div className="card mx-4 text-center">
                                     <img className="card-img-top p-3" src={item?.image} alt="Card" height="300px" width="300px" />
                                     <div className="card-body">
                                         <h5 className="card-title"> {item?.title?.substring(0, 15)}...</h5>
@@ -100,13 +109,14 @@ const Loading = () => {
                                         </Link>
                                         <button
                                             className="btn btn-dark m-1"
-                                        //   onClick={() => addProduct(item)}
+                                          onClick={() => addProduct(item)}
                                         >
                                             Add to Cart
                                         </button>
                                     </div>
 
                                 </div>
+                                </React.Fragment>
                             </>
                         })
                     }

@@ -8,23 +8,21 @@ import { addCart, delCart } from "../redux/action";
 import React from "react";
 import { Link } from "react-router";
 
-// const EmptyCart = () => {
-//     return (<>
-//         <div className="container">
-//             <div className="row">
-//                 <div className="col-md-12 py-5 bg-light text-center">
-//                     <h4 className="p-3 display-5">Your Cart is Empty</h4>
-//                     <Link to="/" className="btn  btn-outline-dark mx-4">
-//                     <i className="fa fa-arrow-left"></i> Continue Shopping
-//                     </Link>
-//                 </div>
-//             </div>
-//         </div>
-//     </>)
-// }
-const ShowCart = () => {
-
-    const state = useSelector((state: any) => state?.HandleCart || []);
+const EmptyCart = () => {
+    return (<>
+        <div className="container">
+            <div className="row">
+                <div className="col-md-12 py-5 bg-light text-center">
+                    <h4 className="p-3 display-5">Your Cart is Empty</h4>
+                    <Link to="/" className="btn  btn-outline-dark mx-4">
+                    <i className="fa fa-arrow-left"></i> Continue Shopping
+                    </Link>
+                </div>
+            </div>
+        </div>
+    </>)
+}
+const ShowCart = ({state}:any) => {
     let subTotal: number = 0;
     const shipping: number = 50;
     let totalItems: number = 0;
@@ -44,6 +42,7 @@ const ShowCart = () => {
     const removeItem = (product: Product) => {
         dispatch(delCart(product));
     };
+   
     return (<>
         <section className="h-100 gradient-custom">
             <div className="container py-5">
@@ -54,7 +53,8 @@ const ShowCart = () => {
                                 <h5 className="mb-0">Item List</h5>
                             </div>
                             <div className="card-body">
-                                {state.map((item: Product) => {
+                                {state?.map((item: Product) => {
+                    
                                     return (
                                         <React.Fragment key={item.id}>
                                             <div className="row d-flex align-items-center">
@@ -144,13 +144,13 @@ const ShowCart = () => {
 }
 
 const Cart = () => {
+    const state = useSelector((state: any) => state?.HandleCart || []);
     return (<>
         <Navbar />
         <div className="container my-3 py-3">
         <h1 className="text-center">Cart</h1>
         <hr />
-        {/* {state.length > 0 ? <ShowCart /> : <EmptyCart />} */}
-        <ShowCart />
+        {state?.length > 0 ? <ShowCart state={state} /> : <EmptyCart />}
       </div>
         <Footer />
     </>);
