@@ -5,8 +5,9 @@ import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../Firebase";
+import { auth, db } from "../Firebase";
 import toast from "react-hot-toast";
+
 
 interface ILoginForm {
   email: string,
@@ -31,7 +32,7 @@ const Login = () => {
         email: response.user.email,
         accessToken: response.user.accessToken,
       };
-
+      console.log('db',db);
       localStorage.setItem("user", JSON.stringify(user));
       toast.success("LoggedIn successfully");
       navigate("/");
