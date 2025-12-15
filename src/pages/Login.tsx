@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase";
+import toast from "react-hot-toast";
 
 interface ILoginForm {
   email: string,
@@ -11,11 +14,31 @@ interface ILoginForm {
 }
 
 const Login = () => {
-
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<ILoginForm>({
     criteriaMode: "all",
   })
-  const onSubmit = (data:ILoginForm) => console.log(data)
+  const onSubmit = async (data: ILoginForm) => {
+    try {
+      const response: any = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      const user = {
+        uid: response.user.uid,
+        email: response.user.email,
+        accessToken: response.user.accessToken,
+      };
+
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success("LoggedIn successfully");
+      navigate("/");
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
 
   return (
     <>
@@ -60,7 +83,7 @@ const Login = () => {
                     }
                   })}
                   className="form-control" placeholder="password" />
-                <ErrorMessage 
+                <ErrorMessage
                   errors={errors}
                   name="password"
                   render={({ messages }) =>

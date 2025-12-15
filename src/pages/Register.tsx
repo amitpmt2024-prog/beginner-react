@@ -1,7 +1,10 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm, Controller } from "react-hook-form";
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase";
+import toast from "react-hot-toast";
 
 type FormValues = {
   name: string;
@@ -31,6 +34,7 @@ const validationRules = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -42,9 +46,17 @@ const Register = () => {
       password: "",
     },
   });
-
-  const submitted = (data: FormValues) => {
-    console.log("data", data);
+  const onSubmit = async (data: FormValues) => {
+    try {
+       await createUserWithEmailAndPassword(auth, data?.email, data?.password);
+       toast.success('User registered successfully');
+       navigate("/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch(error: any) {
+      console.error(error.message);
+    }
+   
+    
   };
 
   return (
@@ -55,7 +67,7 @@ const Register = () => {
         <hr />
         <div className="row my-4 h-100">
           <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-            <form onSubmit={handleSubmit(submitted)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
 
               {/* NAME FIELD */}
               <div className="form my-3">
