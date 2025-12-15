@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
@@ -7,6 +7,9 @@ import { ErrorMessage } from "@hookform/error-message"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../Firebase";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { fetchCartFromFirebase } from "../redux/reducer/HandleCart";
+import { loadCart } from "../redux/action";
 
 
 interface ILoginForm {
@@ -16,9 +19,12 @@ interface ILoginForm {
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
   const { register, handleSubmit, formState: { errors } } = useForm<ILoginForm>({
     criteriaMode: "all",
   })
+  
   const onSubmit = async (data: ILoginForm) => {
     try {
       const response: any = await signInWithEmailAndPassword(
@@ -34,10 +40,24 @@ const Login = () => {
       };
       console.log('db',db);
       localStorage.setItem("user", JSON.stringify(user));
+      
+      // Load cart from Firebase after login
+      try {
+        const cart = await fetchCartFromFirebase(response.user.uid);
+        dispatch(loadCart(cart));
+      } catch (cartError) {
+        console.error("Error loading cart:", cartError);
+      }
+      
       toast.success("LoggedIn successfully");
-      navigate("/");
+      
+      // Redirect to the intended page or home
+      const redirectPath = (location.state as any)?.from?.pathname || sessionStorage.getItem("redirectPath") || "/";
+      sessionStorage.removeItem("redirectPath");
+      navigate(redirectPath, { replace: true });
     } catch (error: any) {
       console.error(error.message);
+      toast.error(error.message || "Login failed");
     }
   };
 

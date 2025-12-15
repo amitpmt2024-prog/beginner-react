@@ -1,10 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { signOut } from 'firebase/auth'
+import { auth } from '../Firebase'
+import { clearCart } from '../redux/action'
+import toast from 'react-hot-toast'
 
 const Navbar = () => {
     const state = useSelector((state: any) => state?.HandleCart || []);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const isLoggedIn = JSON.parse(localStorage.getItem('user') || 'null');
+    
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            localStorage.removeItem('user');
+            dispatch(clearCart());
+            toast.success('Logged out successfully');
+            navigate('/login');
+        } catch (error: any) {
+            console.error('Error logging out:', error);
+            toast.error('Error logging out');
+        }
+    };
+    
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
             <div className="container">
@@ -40,9 +60,17 @@ const Navbar = () => {
                                 </NavLink>
                             </>
                         ) : (
-                            <NavLink to="/cart" className="btn btn-outline-dark m-2">
-                                <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
-                            </NavLink>
+                            <>
+                                <NavLink to="/cart" className="btn btn-outline-dark m-2">
+                                    <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
+                                </NavLink>
+                                <button 
+                                    onClick={handleLogout} 
+                                    className="btn btn-outline-dark m-2"
+                                >
+                                    <i className="fa fa-sign-out-alt mr-1"></i> Logout
+                                </button>
+                            </>
                         )}
 
 

@@ -48,15 +48,20 @@ const Register = () => {
   });
   const onSubmit = async (data: FormValues) => {
     try {
-       await createUserWithEmailAndPassword(auth, data?.email, data?.password);
+       const userCredential = await createUserWithEmailAndPassword(auth, data?.email, data?.password);
+       // User is automatically signed in after registration
+       const user = {
+         uid: userCredential.user.uid,
+         email: userCredential.user.email,
+       };
+       localStorage.setItem("user", JSON.stringify(user));
        toast.success('User registered successfully');
-       navigate("/login");
+       navigate("/");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(error: any) {
       console.error(error.message);
+      toast.error(error.message || "Registration failed");
     }
-   
-    
   };
 
   return (

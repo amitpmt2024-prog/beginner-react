@@ -5,8 +5,12 @@ import Navbar from "../components/Navbar";
 // import { Link } from "react-router";
 import type { Product } from "../types/Product.type";
 import { addCart, delCart } from "../redux/action";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
+import { useCartListener } from "../hooks/useCartListener";
+import { fetchCartFromFirebase } from "../redux/reducer/HandleCart";
+import { loadCart } from "../redux/action";
+import { auth } from "../Firebase";
 
 const EmptyCart = () => {
     return (<>
@@ -145,6 +149,26 @@ const ShowCart = ({state}:any) => {
 
 const Cart = () => {
     const state = useSelector((state: any) => state?.HandleCart || []);
+    const dispatch = useDispatch();
+    
+    // Set up real-time listener for Firebase cart changes
+    // This will automatically update the cart when syncProductToFirebase makes changes
+    useCartListener();
+    
+    // Also fetch cart on mount to ensure we have the latest data
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user?.uid) {
+            fetchCartFromFirebase(user.uid)
+                .then((cart) => {
+                    dispatch(loadCart(cart));
+                })
+                .catch((error) => {
+                    console.error("Error fetching cart on mount:", error);
+                });
+        }
+    }, [dispatch]);
+    
     return (<>
         <Navbar />
         <div className="container my-3 py-3">

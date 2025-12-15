@@ -15,27 +15,37 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import Cart from './pages/Cart';
 import { Toaster } from "react-hot-toast";
+import { useCartSync } from "./hooks/useCartSync";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
+
+// Component to handle cart sync
+const CartSyncWrapper = () => {
+  useCartSync();
+  return null;
+};
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop>
         <Provider store={store}>
+        <CartSyncWrapper />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/product" element={<ProductsPage />} />
-          <Route path="*" element={<PageNotFound />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/cart" element={< Cart/>} />
-          {/* <Route path="/product" element={<Products />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/product/*" element={<PageNotFound />} /> */}
+          {/* Public Routes - Only accessible when NOT logged in */}
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+          
+          {/* Protected Routes - Only accessible when logged in */}
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+          <Route path="/product" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+          <Route path="/product/:id" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          
+          {/* 404 Page */}
+          <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />
         </Routes>
         <Toaster />
         </Provider>
