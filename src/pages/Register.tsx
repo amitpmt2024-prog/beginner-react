@@ -2,9 +2,10 @@ import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm, Controller } from "react-hook-form";
-import {  createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Firebase";
 import toast from "react-hot-toast";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 type FormValues = {
   name: string;
@@ -48,19 +49,30 @@ const Register = () => {
   });
   const onSubmit = async (data: FormValues) => {
     try {
-       const userCredential = await createUserWithEmailAndPassword(auth, data?.email, data?.password);
-       // User is automatically signed in after registration
-       const user = {
-         uid: userCredential.user.uid,
-         email: userCredential.user.email,
-       };
-       localStorage.setItem("user", JSON.stringify(user));
-       toast.success('User registered successfully');
-       navigate("/");
-    } catch(error) {
-      if(error instanceof Error && error.name !== "AbortError") {
+      const userCredential = await createUserWithEmailAndPassword(auth, data?.email, data?.password);
+      // User is automatically signed in after registration
+      const user = {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      toast.success('User registered successfully');
+      navigate("/");
+    } catch (error) {
+      if (error instanceof Error && error.name !== "AbortError") {
         toast.error(error.message || "Registration failed");
       }
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      console.log("User:", result.user);
+    } catch (error) {
+      console.error("Google sign-in error:", error);
     }
   };
 
@@ -160,6 +172,15 @@ const Register = () => {
                   </Link>
                 </p>
               </div>
+
+              <button onClick={handleGoogleSignIn} className="google-modern-btn">
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google"
+                />
+                Continue with Google
+              </button>
+
 
               <div className="text-center">
                 <button className="my-2 mx-auto btn btn-dark" type="submit">
