@@ -30,7 +30,7 @@ const DefaultList = () => {
           console.log('data', data.results);
           setMovie(data.results);
         }
-      } catch (error: unknown) {
+      } catch (error) {
         if (error instanceof Error && error.name !== "AbortError") {
           console.log("error", error);
         }

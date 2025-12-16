@@ -58,9 +58,10 @@ const Register = () => {
        toast.success('User registered successfully');
        navigate("/");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch(error: any) {
-      console.error(error.message);
-      toast.error(error.message || "Registration failed");
+    } catch(error) {
+      if(error instanceof Error && error.name !== "AbortError") {
+        toast.error(error.message || "Registration failed");
+      }
     }
   };
 

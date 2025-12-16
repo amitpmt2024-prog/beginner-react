@@ -55,9 +55,10 @@ const Login = () => {
       const redirectPath = (location.state as any)?.from?.pathname || sessionStorage.getItem("redirectPath") || "/";
       sessionStorage.removeItem("redirectPath");
       navigate(redirectPath, { replace: true });
-    } catch (error: any) {
-      console.error(error.message);
-      toast.error(error.message || "Login failed");
+    } catch (error) {
+      if(error instanceof Error && error.name !== "AbortError") {
+        toast.error(error.message || "Login failed");
+      }
     }
   };
 
