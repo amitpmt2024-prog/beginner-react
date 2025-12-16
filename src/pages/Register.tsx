@@ -26,9 +26,9 @@ const validationRules = {
   },
   password: {
     required: "Password is required",
-    minLength: {
-      value: 6,
-      message: "Password must be at least 6 characters",
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+      message: "Please enter a minimum eight characters, at least one letter and one number",
     },
   },
 };
