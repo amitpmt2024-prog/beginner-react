@@ -52,7 +52,7 @@ const Login = () => {
       toast.success("LoggedIn successfully");
       
       // Redirect to the intended page or home
-      const redirectPath = (location.state as any)?.from?.pathname || sessionStorage.getItem("redirectPath") || "/";
+      const redirectPath = (location.state )?.from?.pathname || sessionStorage.getItem("redirectPath") || "/";
       sessionStorage.removeItem("redirectPath");
       navigate(redirectPath, { replace: true });
     } catch (error) {

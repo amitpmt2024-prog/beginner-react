@@ -57,7 +57,6 @@ const Register = () => {
        localStorage.setItem("user", JSON.stringify(user));
        toast.success('User registered successfully');
        navigate("/");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch(error) {
       if(error instanceof Error && error.name !== "AbortError") {
         toast.error(error.message || "Registration failed");

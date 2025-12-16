@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-// import { Link } from "react-router";
 import type { Product } from "../types/Product.type";
 import { addCart, delCart } from "../redux/action";
 import React, { useEffect } from "react";
@@ -26,7 +24,7 @@ const EmptyCart = () => {
         </div>
     </>)
 }
-const ShowCart = ({state}:any) => {
+const ShowCart = ({state}:{state: Product[]}) => {
     let subTotal: number = 0;
     const shipping: number = 50;
     let totalItems: number = 0;
@@ -148,7 +146,7 @@ const ShowCart = ({state}:any) => {
 }
 
 const Cart = () => {
-    const state = useSelector((state: any) => state?.HandleCart || []);
+    const state = useSelector((state: {HandleCart: Product[]}) => state?.HandleCart || []);
     const dispatch = useDispatch();
     
     // Set up real-time listener for Firebase cart changes
