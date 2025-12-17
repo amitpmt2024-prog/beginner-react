@@ -18,6 +18,7 @@ import { Toaster } from "react-hot-toast";
 import { useCartSync } from "./hooks/useCartSync";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import SearchBar from './components/SearchBar';
 
 // Component to handle cart sync
 const CartSyncWrapper = () => {
@@ -33,6 +34,7 @@ function App() {
         <CartSyncWrapper />
         <Routes>
           {/* Public Routes - Only accessible when NOT logged in */}
+          <Route path="/movies" element={<PublicRoute><SearchBar /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
           
