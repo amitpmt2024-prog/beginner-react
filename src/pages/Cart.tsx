@@ -79,7 +79,8 @@ const ShowCart = ({state}:{state: Product[]}) => {
                                                                 removeItem(item);
                                                             }}
                                                         >
-                                                            <i className="fas fa-minus"></i>
+                                                            {/* <i className="fas fa-minus"></i> */}
+                                                            <strong>-</strong>
                                                         </button>
 
                                                         <p className="mx-5">{item.qty}</p>
@@ -90,7 +91,8 @@ const ShowCart = ({state}:{state: Product[]}) => {
                                                                 addItem(item);
                                                             }}
                                                         >
-                                                            <i className="fas fa-plus"></i>
+                                                            {/* <i className="fas fa-plus"></i */}
+                                                            <strong>+</strong>
                                                         </button>
                                                     </div>
 
