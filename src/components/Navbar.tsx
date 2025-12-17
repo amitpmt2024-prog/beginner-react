@@ -61,9 +61,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <>
-                                <NavLink to="/cart" className="btn btn-outline-dark m-2">
-                                    <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
-                                </NavLink>
+                               
                                 <button 
                                     onClick={handleLogout} 
                                     className="btn btn-outline-dark m-2"
@@ -73,7 +71,9 @@ const Navbar = () => {
                             </>
                         )}
 
-
+                      <NavLink to="/cart" className="btn btn-outline-dark m-2">
+                                    <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
+                                </NavLink>
 
                     </div>
                 </div>

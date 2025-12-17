@@ -4,12 +4,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../Firebase";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { fetchCartFromFirebase } from "../redux/reducer/HandleCart";
+import { fetchCartFromFirebase, syncCartToFirebase } from "../redux/reducer/HandleCart";
 import { loadCart } from "../redux/action";
+import type { Product } from "../types/Product.type";
 
 
 interface ILoginForm {
@@ -61,6 +62,45 @@ const Login = () => {
       }
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      
+      // Save user info to localStorage
+      const user = {
+        uid: result.user.uid,
+        email: result.user.email,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      
+      // Get cart from localStorage and sync to Firebase if it exists
+      const cartData = localStorage.getItem('cart');
+      if (result.user.uid && cartData) {
+        try {
+          const cart: Product[] = JSON.parse(cartData);
+          if (cart && Array.isArray(cart) && cart.length > 0) {
+            // Sync cart to Firebase
+            await syncCartToFirebase(result.user.uid, cart);
+            // Update Redux store with the cart
+            dispatch(loadCart(cart));
+          }
+        } catch (parseError) {
+          console.error("Error parsing cart from localStorage:", parseError);
+        }
+      }
+      
+      toast.success('Signed in with Google successfully');
+      navigate("/");
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      if (error instanceof Error) {
+        toast.error(error.message || "Google sign-in failed");
+      }
+    }
+  };
+        
 
   return (
     <>
@@ -119,6 +159,13 @@ const Login = () => {
               <div className="my-3">
                 <p>New Here? <Link to="/register" className="text-decoration-underline text-info">Register</Link> </p>
               </div>
+               <button onClick={handleGoogleSignIn} className="google-modern-btn">
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google"
+                />
+                Continue with Google
+              </button>
               <div className="text-center">
                 <button className="my-2 mx-auto btn btn-dark" type="submit">
                   Login

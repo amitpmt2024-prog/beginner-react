@@ -60,7 +60,7 @@ const syncProductToFirebase = async (uid: string, product: Product, operation: '
 /**
  * Sync entire cart array to Firebase
  */
-const syncCartToFirebase = async (uid: string, cart: Product[]) => {
+export const syncCartToFirebase = async (uid: string, cart: Product[]) => {
   try {
     const cartRef = doc(db, "carts", uid);
     const items: Record<string, Product> = {};
@@ -136,10 +136,10 @@ const handleCart = (
 
       const product = action.payload as Product;
 
-      if (!auth.currentUser?.uid) {
-        alert("Please login first");
-        return state;
-      }
+      // if (!auth.currentUser?.uid) {
+      //   alert("Please login first");
+      //   return state;
+      // }
 
       const exist = state.find((x: Product) => x.id === product.id);
       if (exist) {

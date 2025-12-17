@@ -42,9 +42,9 @@ function App() {
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
-          <Route path="/product" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
-          <Route path="/product/:id" element={<ProtectedRoute><Product /></ProtectedRoute>} />
-          <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path="/product" element={<ProductsPage />} />
+          <Route path="/product/:id" element={<PublicRoute><Product /></PublicRoute>} />
+          <Route path="/cart" element={<Cart />} />
           
           {/* 404 Page */}
           <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />

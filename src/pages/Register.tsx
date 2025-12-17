@@ -6,6 +6,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Firebase";
 import toast from "react-hot-toast";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { loadCart } from "../redux/action";
+import { useDispatch } from "react-redux";
+import { syncCartToFirebase } from "../redux/reducer/HandleCart";
+import type { Product } from "../types/Product.type";
 
 type FormValues = {
   name: string;
@@ -36,6 +40,7 @@ const validationRules = {
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -69,10 +74,37 @@ const Register = () => {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-
-      console.log("User:", result.user);
+      
+      // Save user info to localStorage
+      const user = {
+        uid: result.user.uid,
+        email: result.user.email,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      
+      // Get cart from localStorage and sync to Firebase if it exists
+      const cartData = localStorage.getItem('cart');
+      if (result.user.uid && cartData) {
+        try {
+          const cart: Product[] = JSON.parse(cartData);
+          if (cart && Array.isArray(cart) && cart.length > 0) {
+            // Sync cart to Firebase
+            await syncCartToFirebase(result.user.uid, cart);
+            // Update Redux store with the cart
+            dispatch(loadCart(cart));
+          }
+        } catch (parseError) {
+          console.error("Error parsing cart from localStorage:", parseError);
+        }
+      }
+      
+      toast.success('Signed in with Google successfully');
+      navigate("/");
     } catch (error) {
       console.error("Google sign-in error:", error);
+      if (error instanceof Error) {
+        toast.error(error.message || "Google sign-in failed");
+      }
     }
   };
 
