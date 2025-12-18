@@ -47,6 +47,11 @@ const Navbar = () => {
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/contact">Contact</NavLink>
                         </li>
+                        {isLoggedIn && (
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/orders">Orders</NavLink>
+                            </li>
+                        )}
                     </ul>
                     <div className="buttons text-center">
                         <NavLink to="/cart" className="btn btn-outline-dark m-2">

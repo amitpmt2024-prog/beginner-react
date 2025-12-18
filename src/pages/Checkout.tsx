@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import type { Product } from "../types/Product.type";
@@ -9,6 +9,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../Firebase";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { clearCart } from "../redux/action";
 
 type FormValues = {
     firstName: string;
@@ -61,6 +62,7 @@ const validationRules = {
 
 const Checkout = () => {
     const state = useSelector((state: { HandleCart: Product[] }) => state.HandleCart || []);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const {
         control,
@@ -126,12 +128,15 @@ const Checkout = () => {
                 shipping: shipping,
                 total: Math.round(total),
                 totalItems: totalItems,
-                status: "pending",
+                status: "delivered",
                 createdAt: serverTimestamp(),
             };
 
             // Save order to Firebase
             const orderRef = await addDoc(collection(db, "orders"), order);
+            
+            // Clear the cart after successful order placement
+            dispatch(clearCart());
             
             toast.success("Order placed successfully!");
             console.log("Order created with ID: ", orderRef.id);

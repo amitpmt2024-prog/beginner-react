@@ -20,6 +20,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import SearchBar from './components/SearchBar';
 import Checkout from './pages/Checkout';
+import OrderHistory from './pages/OrderHistory';
 
 // Component to handle cart sync
 const CartSyncWrapper = () => {
@@ -47,6 +48,7 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
           
           {/* 404 Page */}
           <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />
