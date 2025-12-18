@@ -9,6 +9,7 @@ import { useCartListener } from "../hooks/useCartListener";
 import { fetchCartFromFirebase } from "../redux/reducer/HandleCart";
 import { loadCart } from "../redux/action";
 import { auth } from "../Firebase";
+import OrderSummary from "./OrderSummary";
 
 const EmptyCart = () => {
     return (<>
@@ -26,7 +27,7 @@ const EmptyCart = () => {
 }
 const ShowCart = ({ state }: { state: Product[] }) => {
     let subTotal: number = 0;
-    const shipping: number = 50;
+    // const shipping: number = 50;
     let totalItems: number = 0;
     state.map((item: Product) => {
         subTotal += (item?.price || 0) * (item.qty ?? 0);
@@ -118,7 +119,7 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         <div className="card mb-4">
                             <div className="card-header py-3 bg-light">
                                 <h5 className="mb-0">Order Summary</h5>
@@ -147,7 +148,8 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                 </Link>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
+                  <OrderSummary state={state}/>
                 </div>
             </div>
         </section>
