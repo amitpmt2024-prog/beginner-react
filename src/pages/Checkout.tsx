@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import type { Product, ProductProps } from "../types/Product.type";
 import { addCart } from "../redux/action";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 import Skeleton from "react-loading-skeleton";
 import toast from "react-hot-toast";
 
@@ -66,6 +66,8 @@ const ShowProduct = ({ product }: ProductProps) => {
 
 const Checkout = () => {
     const {id} = useParams();
+    const [searchParams] = useSearchParams();
+    const qty:string | null= searchParams.get("qty");
     const [product,setProduct] = useState<Product>({});
     const [loading, setLoading] = useState(false);
 
@@ -73,11 +75,16 @@ const Checkout = () => {
         const getProduct = async () => {
             setLoading(true);
             const response = await fetch( `https://fakestoreapi.com/products/${id}`);
-            setProduct(await response.json());
+            const data = await response.json();
+            data.qty = qty;
+            setProduct({
+        ...data,
+        qty,
+      });
             setLoading(false);
         }
         getProduct();
-    },[id]);
+    },[id, qty]);
 
     return (<>
         <Navbar />

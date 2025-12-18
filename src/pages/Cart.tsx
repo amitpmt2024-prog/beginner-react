@@ -70,11 +70,10 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-5 col-md-6">
-                                                    <Link to={`/checkout/${item.id}`} className="text-decoration-none">
+                                                    <Link to={`/checkout/${item.id}?qty=${item.qty}`} className="text-decoration-none">
                                                         <strong>{item.title}</strong>
                                                     </Link>
                                                 </div>
-
                                                 <div className="col-lg-4 col-md-6">
                                                     <div
                                                         className="d-flex mb-4"
@@ -89,8 +88,6 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                             {/* <i className="fas fa-minus"></i> */}
                                                             <strong>-</strong>
                                                         </button>
-
-
                                                         <p className="mx-5">{item.qty}</p>
 
                                                         <button
@@ -108,12 +105,9 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                     </div>
 
                                                     <p className="text-start text-md-center">
-
                                                         <span className="text-muted">{item.qty}</span>{" "}
                                                         x ${item.price} ={" "}
                                                         <span><strong>${(item?.qty || 0) * (item?.price || 0)}</strong></span>
-
-
                                                     </p>
                                                 </div>
                                             </div>
