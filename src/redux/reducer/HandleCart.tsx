@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { deleteField, doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import type { Product } from "../../types/Product.type";
 import { auth, db } from "../../Firebase";
 
@@ -33,25 +33,25 @@ const syncProductToFirebase = async (uid: string, product: Product, operation: '
           qty: 1,
         };
       }
-    } else if (operation === 'remove') {
-      if (items[productId]) {
-        if (items[productId].qty === 1) {
-          // Remove product if qty is 1
-          delete items[productId];
-        } else {
-          // Decrement qty
-          items[productId].qty = (items[productId].qty || 0) - 1;
-        }
+      await setDoc(
+        cartRef,
+        {
+          items,
+        },
+        { merge: true }
+      );
+    } if (operation === "remove") {
+      if (items[productId]?.qty === 1) {
+        await updateDoc(cartRef, {
+          [`items.${productId}`]: deleteField(),
+        });
+      } else {
+        await updateDoc(cartRef, {
+          [`items.${productId}.qty`]: increment(-1),
+        });
       }
     }
 
-    await setDoc(
-      cartRef,
-      {
-        items,
-      },
-      { merge: true }
-    );
   } catch (error) {
     console.error("Error syncing cart to Firebase:", error);
   }
@@ -184,7 +184,6 @@ const handleCart = (
 
       // Update localStorage
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-
       // Sync to Firestore (async, fire & forget)
       if (auth.currentUser?.uid) {
         syncProductToFirebase(auth.currentUser.uid, product, 'remove').catch(console.error);
