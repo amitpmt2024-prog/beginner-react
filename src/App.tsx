@@ -19,6 +19,7 @@ import { useCartSync } from "./hooks/useCartSync";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import SearchBar from './components/SearchBar';
+import Checkout from './pages/Checkout';
 
 // Component to handle cart sync
 const CartSyncWrapper = () => {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/product" element={<ProductsPage />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout/:id" element={<Checkout />} />
           
           {/* 404 Page */}
           <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />

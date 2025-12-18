@@ -70,8 +70,11 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-5 col-md-6">
-                                                    <p><strong>{item.title}</strong></p>
+                                                    <Link to={`/checkout/${item.id}`} className="text-decoration-none">
+                                                        <strong>{item.title}</strong>
+                                                    </Link>
                                                 </div>
+
                                                 <div className="col-lg-4 col-md-6">
                                                     <div
                                                         className="d-flex mb-4"
