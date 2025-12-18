@@ -43,7 +43,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/product" element={<ProductsPage />} />
-          <Route path="/product/:id" element={<PublicRoute><Product /></PublicRoute>} />
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           
           {/* 404 Page */}
