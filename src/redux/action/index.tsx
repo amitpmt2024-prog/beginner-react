@@ -31,3 +31,10 @@ export const clearCart = () => {
         payload: null
     }
 }
+
+export const delSingleCart = (product: Product) => {
+    return {
+        type: "DEL_SINGLE_ITEM",
+        payload: product
+    }
+}

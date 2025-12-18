@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import type { Product } from "../types/Product.type";
-import { addCart, delCart } from "../redux/action";
+import { addCart, delCart, delSingleCart } from "../redux/action";
 import React, { useEffect } from "react";
 import { Link } from "react-router";
 import { useCartListener } from "../hooks/useCartListener";
@@ -43,6 +43,10 @@ const ShowCart = ({ state }: { state: Product[] }) => {
     };
     const removeItem = (product: Product) => {
         dispatch(delCart(product));
+    };
+
+    const removeSingleItem = (product: Product) => {
+        dispatch(delSingleCart(product));
     };
 
     return (<>
@@ -95,7 +99,7 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                             {/* <i className="fas fa-plus"></i */}
                                                             <strong>+</strong>
                                                         </button>
-                                                        <button className="btn px-2 btn btn-danger" >
+                                                        <button className="btn px-2 btn btn-danger" onClick={() => removeSingleItem(item)} >
                                                             Remove
                                                         </button>
                                                     </div>

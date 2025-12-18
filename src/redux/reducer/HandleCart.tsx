@@ -5,7 +5,7 @@ import { auth, db } from "../../Firebase";
 /**
  * Sync a single product to Firebase cart
  */
-const syncProductToFirebase = async (uid: string, product: Product, operation: 'add' | 'remove') => {
+const syncProductToFirebase = async (uid: string, product: Product, operation: 'add' | 'remove' | 'single remove') => {
   try {
     const cartRef = doc(db, "carts", uid);
     const cartSnap = await getDoc(cartRef);
@@ -40,7 +40,8 @@ const syncProductToFirebase = async (uid: string, product: Product, operation: '
         },
         { merge: true }
       );
-    } if (operation === "remove") {
+    } 
+    if (operation === "remove") {
       if (items[productId]?.qty === 1) {
         await updateDoc(cartRef, {
           [`items.${productId}`]: deleteField(),
@@ -50,6 +51,11 @@ const syncProductToFirebase = async (uid: string, product: Product, operation: '
           [`items.${productId}.qty`]: increment(-1),
         });
       }
+    } 
+    if(operation === "single remove") {
+       await updateDoc(cartRef, {
+          [`items.${productId}`]: deleteField(),
+        });
     }
 
   } catch (error) {
@@ -136,11 +142,6 @@ const handleCart = (
 
       const product = action.payload as Product;
 
-      // if (!auth.currentUser?.uid) {
-      //   alert("Please login first");
-      //   return state;
-      // }
-
       const exist = state.find((x: Product) => x.id === product.id);
       if (exist) {
         // Increase the quantity
@@ -213,9 +214,32 @@ const handleCart = (
       return updatedCart;
     }
 
+    case "DEL_SINGLE_ITEM": {
+      if (!action.payload || !(action.payload as Product).id) {
+        return state;
+      }
+
+      const product = action.payload as Product;
+      const exist: Product | undefined = state.find((x: Product) => x.id === product.id);
+
+      if (!exist) {
+        return state;
+      }
+      updatedCart = state.filter((x: Product) => x.id !== exist.id);
+      // Update localStorage
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+      // Sync to Firestore (async, fire & forget)
+      if (auth.currentUser?.uid) {
+        syncProductToFirebase(auth.currentUser.uid, product, 'single remove').catch(console.error);
+      }
+      return updatedCart;
+    }
     default:
       return state;
   }
+    
+      
 };
 
 export default handleCart;
