@@ -54,13 +54,28 @@ const Register = () => {
   });
   const onSubmit = async (data: FormValues) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, data?.email, data?.password);
+      const result = await createUserWithEmailAndPassword(auth, data?.email, data?.password);
       // User is automatically signed in after registration
       const user = {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
+        uid: result.user.uid,
+        email: result.user.email,
       };
       localStorage.setItem("user", JSON.stringify(user));
+        // Get cart from localStorage and sync to Firebase if it exists
+      const cartData = localStorage.getItem('cart');
+      if (result.user.uid && cartData) {
+        try {
+          const cart: Product[] = JSON.parse(cartData);
+          if (cart && Array.isArray(cart) && cart.length > 0) {
+            // Sync cart to Firebase
+            await syncCartToFirebase(result.user.uid, cart);
+            // Update Redux store with the cart
+            dispatch(loadCart(cart));
+          }
+        } catch (parseError) {
+          console.error("Error parsing cart from localStorage:", parseError);
+        }
+      }
       toast.success('User registered successfully');
       navigate("/");
     } catch (error) {

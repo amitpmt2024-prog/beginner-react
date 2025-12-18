@@ -5,10 +5,10 @@ import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, db } from "../Firebase";
+import { auth } from "../Firebase";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { fetchCartFromFirebase, syncCartToFirebase } from "../redux/reducer/HandleCart";
+import {  syncCartToFirebase } from "../redux/reducer/HandleCart";
 import { loadCart } from "../redux/action";
 import type { Product } from "../types/Product.type";
 
@@ -28,26 +28,32 @@ const Login = () => {
   
   const onSubmit = async (data: ILoginForm) => {
     try {
-      const response: any = await signInWithEmailAndPassword(
+      const result: any = await signInWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
 
       const user = {
-        uid: response.user.uid,
-        email: response.user.email,
-        accessToken: response.user.accessToken,
+        uid: result.user.uid,
+        email: result.user.email,
+        accessToken: result.user.accessToken,
       };
-      console.log('db',db);
       localStorage.setItem("user", JSON.stringify(user));
-      
-      // Load cart from Firebase after login
-      try {
-        const cart = await fetchCartFromFirebase(response.user.uid);
-        dispatch(loadCart(cart));
-      } catch (cartError) {
-        console.error("Error loading cart:", cartError);
+
+      const cartData = localStorage.getItem('cart');
+      if (result.user.uid && cartData) {
+        try {
+          const cart: Product[] = JSON.parse(cartData);
+          if (cart && Array.isArray(cart) && cart.length > 0) {
+            // Sync cart to Firebase
+            await syncCartToFirebase(result.user.uid, cart);
+            // Update Redux store with the cart
+            dispatch(loadCart(cart));
+          }
+        } catch (parseError) {
+          console.error("Error parsing cart from localStorage:", parseError);
+        }
       }
       
       toast.success("LoggedIn successfully");
