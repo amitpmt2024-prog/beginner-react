@@ -5,6 +5,10 @@ import type { Product } from "../types/Product.type";
 
 import OrderSummary from "./OrderSummary";
 import { Controller, useForm } from "react-hook-form";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../Firebase";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 type FormValues = {
     firstName: string;
@@ -57,6 +61,7 @@ const validationRules = {
 
 const Checkout = () => {
     const state = useSelector((state: { HandleCart: Product[] }) => state.HandleCart || []);
+    const navigate = useNavigate();
     const {
         control,
         handleSubmit,
@@ -74,9 +79,70 @@ const Checkout = () => {
         },
     });
 
-    const onSubmit = (data: FormValues) => {
-        console.log("Form submitted:", data);
-        // Add your submission logic here
+    const onSubmit = async (data: FormValues) => {
+        try {
+            const user = auth.currentUser;
+            
+            if (!user) {
+                toast.error("Please login to place an order");
+                navigate("/login");
+                return;
+            }
+
+            if (state.length === 0) {
+                toast.error("Your cart is empty");
+                return;
+            }
+
+            // Calculate order totals
+            let subTotal = 0;
+            let totalItems = 0;
+            state.forEach((item: Product) => {
+                subTotal += (item?.price || 0) * (item.qty ?? 0);
+                totalItems += (item.qty ?? 0);
+            });
+            const shipping = 50;
+            const total = subTotal + shipping;
+
+            // Prepare address object
+            const address = {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                address: data.address,
+                address2: data.address2 || "",
+                country: data.country,
+                state: data.state,
+                zip: data.zip,
+            };
+
+            // Prepare order object
+            const order = {
+                userId: user.uid,
+                userEmail: user.email || data.email,
+                items: state,
+                address: address,
+                subTotal: Math.round(subTotal),
+                shipping: shipping,
+                total: Math.round(total),
+                totalItems: totalItems,
+                status: "pending",
+                createdAt: serverTimestamp(),
+            };
+
+            // Save order to Firebase
+            const orderRef = await addDoc(collection(db, "orders"), order);
+            
+            toast.success("Order placed successfully!");
+            console.log("Order created with ID: ", orderRef.id);
+            
+            // Optionally navigate to order confirmation page
+            // navigate(`/order-confirmation/${orderRef.id}`);
+            
+        } catch (error) {
+            console.error("Error creating order:", error);
+            toast.error("Failed to place order. Please try again.");
+        }
     };
     return (<>
         <Navbar />
