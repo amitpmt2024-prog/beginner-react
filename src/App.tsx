@@ -46,7 +46,7 @@ function App() {
           <Route path="/product" element={<ProductsPage />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout/:id" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout />} />
           
           {/* 404 Page */}
           <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />

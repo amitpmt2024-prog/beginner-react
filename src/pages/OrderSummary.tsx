@@ -15,7 +15,6 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
     })
 
     return (<>
-        <div className="col-md-4">
             <div className="card mb-4">
                 <div className="card-header py-3 bg-light">
                     <h5 className="mb-0">Order Summary</h5>
@@ -44,7 +43,6 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
                     </Link>
                 </div>
             </div>
-        </div>
     </>);
 }
 
