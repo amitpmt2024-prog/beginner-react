@@ -40,8 +40,8 @@ function App() {
           
           {/* Protected Routes - Only accessible when logged in */}
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/product" element={<ProductsPage />} />
           <Route path="/product/:id" element={<PublicRoute><Product /></PublicRoute>} />
           <Route path="/cart" element={<Cart />} />

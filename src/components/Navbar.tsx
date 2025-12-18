@@ -11,7 +11,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isLoggedIn = JSON.parse(localStorage.getItem('user') || 'null');
-    
+
     const handleLogout = async () => {
         try {
             await signOut(auth);
@@ -24,7 +24,7 @@ const Navbar = () => {
             toast.error('Error logging out');
         }
     };
-    
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
             <div className="container">
@@ -49,32 +49,26 @@ const Navbar = () => {
                         </li>
                     </ul>
                     <div className="buttons text-center">
+                        <NavLink to="/cart" className="btn btn-outline-dark m-2">
+                            <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
+                        </NavLink>
                         {!isLoggedIn ? (
                             <>
                                 <NavLink to="/login" className="btn btn-outline-dark m-2">
                                     <i className="fa fa-sign-in-alt mr-1"></i> Login
                                 </NavLink>
-
-                                <NavLink to="/register" className="btn btn-outline-dark m-2">
-                                    <i className="fa fa-user-plus mr-1"></i> Register
-                                </NavLink>
                             </>
                         ) : (
                             <>
-                               
-                                <button 
-                                    onClick={handleLogout} 
+
+                                <button
+                                    onClick={handleLogout}
                                     className="btn btn-outline-dark m-2"
                                 >
                                     <i className="fa fa-sign-out-alt mr-1"></i> Logout
                                 </button>
                             </>
                         )}
-
-                      <NavLink to="/cart" className="btn btn-outline-dark m-2">
-                                    <i className="fa fa-cart-shopping mr-1"></i> Cart ({state.length})
-                                </NavLink>
-
                     </div>
                 </div>
 
