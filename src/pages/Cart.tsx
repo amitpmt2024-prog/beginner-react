@@ -17,14 +17,14 @@ const EmptyCart = () => {
                 <div className="col-md-12 py-5 bg-light text-center">
                     <h4 className="p-3 display-5">Your Cart is Empty</h4>
                     <Link to="/" className="btn  btn-outline-dark mx-4">
-                    <i className="fa fa-arrow-left"></i> Continue Shopping
+                        <i className="fa fa-arrow-left"></i> Continue Shopping
                     </Link>
                 </div>
             </div>
         </div>
     </>)
 }
-const ShowCart = ({state}:{state: Product[]}) => {
+const ShowCart = ({ state }: { state: Product[] }) => {
     let subTotal: number = 0;
     const shipping: number = 50;
     let totalItems: number = 0;
@@ -44,7 +44,7 @@ const ShowCart = ({state}:{state: Product[]}) => {
     const removeItem = (product: Product) => {
         dispatch(delCart(product));
     };
-   
+
     return (<>
         <section className="h-100 gradient-custom">
             <div className="container py-5">
@@ -56,7 +56,7 @@ const ShowCart = ({state}:{state: Product[]}) => {
                             </div>
                             <div className="card-body">
                                 {state?.map((item: Product) => {
-                    
+
                                     return (
                                         <React.Fragment key={item.id}>
                                             <div className="row d-flex align-items-center">
@@ -83,6 +83,7 @@ const ShowCart = ({state}:{state: Product[]}) => {
                                                             <strong>-</strong>
                                                         </button>
 
+
                                                         <p className="mx-5">{item.qty}</p>
 
                                                         <button
@@ -94,13 +95,18 @@ const ShowCart = ({state}:{state: Product[]}) => {
                                                             {/* <i className="fas fa-plus"></i */}
                                                             <strong>+</strong>
                                                         </button>
+                                                        <button className="btn px-2 btn btn-danger" >
+                                                            Remove
+                                                        </button>
                                                     </div>
 
                                                     <p className="text-start text-md-center">
-                                                        <strong>
-                                                            <span className="text-muted">{item.qty}</span>{" "}
-                                                            x ${item.price}
-                                                        </strong>
+
+                                                        <span className="text-muted">{item.qty}</span>{" "}
+                                                        x ${item.price} ={" "}
+                                                        <span><strong>${(item?.qty || 0) * (item?.price || 0)}</strong></span>
+
+
                                                     </p>
                                                 </div>
                                             </div>
@@ -148,13 +154,13 @@ const ShowCart = ({state}:{state: Product[]}) => {
 }
 
 const Cart = () => {
-    const state = useSelector((state: {HandleCart: Product[]}) => state?.HandleCart || []);
+    const state = useSelector((state: { HandleCart: Product[] }) => state?.HandleCart || []);
     const dispatch = useDispatch();
-    
+
     // Set up real-time listener for Firebase cart changes
     // This will automatically update the cart when syncProductToFirebase makes changes
     useCartListener();
-    
+
     // Also fetch cart on mount to ensure we have the latest data
     useEffect(() => {
         const user = auth.currentUser;
@@ -168,14 +174,14 @@ const Cart = () => {
                 });
         }
     }, [dispatch]);
-    
+
     return (<>
         <Navbar />
         <div className="container my-3 py-3">
-        <h1 className="text-center">Cart</h1>
-        <hr />
-        {state?.length > 0 ? <ShowCart state={state} /> : <EmptyCart />}
-      </div>
+            <h1 className="text-center">Cart</h1>
+            <hr />
+            {state?.length > 0 ? <ShowCart state={state} /> : <EmptyCart />}
+        </div>
         <Footer />
     </>);
 }
