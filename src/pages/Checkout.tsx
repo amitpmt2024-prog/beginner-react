@@ -140,10 +140,7 @@ const Checkout = () => {
             
             toast.success("Order placed successfully!");
             console.log("Order created with ID: ", orderRef.id);
-            
-            // Optionally navigate to order confirmation page
-            // navigate(`/order-confirmation/${orderRef.id}`);
-            
+            navigate("/orders");
         } catch (error) {
             console.error("Error creating order:", error);
             toast.error("Failed to place order. Please try again.");
