@@ -74,40 +74,47 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                     <strong>{item.title}</strong>
                                                 </div>
                                                 <div className="col-lg-4 col-md-6">
-                                                    <div
-                                                        className="d-flex mb-4"
-                                                        style={{ maxWidth: "300px" }}
-                                                    >
-                                                        <button
-                                                            className="btn px-3"
-                                                            onClick={() => {
-                                                                removeItem(item);
-                                                            }}
-                                                        >
-                                                            {/* <i className="fas fa-minus"></i> */}
-                                                            <strong>-</strong>
-                                                        </button>
-                                                        <p className="mx-5">{item.qty}</p>
+                                                    <div className="d-flex flex-column align-items-start align-items-md-end mb-3">
+                                                        {/* Quantity Controls */}
+                                                        <div className="d-flex align-items-center mb-2">
+                                                            <button
+                                                                className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
+                                                                onClick={() => removeItem(item)}
+                                                                style={{ width: "36px", height: "36px" }}
+                                                            >
+                                                                <i className="fa fa-minus"></i>
+                                                            </button>
+                                                            <div className="mx-3 px-3 py-1 border rounded bg-light text-center">
+                                                                <strong>{item.qty}</strong>
+                                                            </div>
+                                                            <button
+                                                                className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
+                                                                onClick={() => addItem(item)}
+                                                                style={{ width: "36px", height: "36px" }}
+                                                            >
+                                                                <i className="fa fa-plus"></i>
+                                                            </button>
+                                                        </div>
 
-                                                        <button
-                                                            className="btn px-3"
-                                                            onClick={() => {
-                                                                addItem(item);
-                                                            }}
+                                                        {/* Remove Button */}
+                                                        <button 
+                                                            className="btn btn-danger btn-sm mb-2" 
+                                                            onClick={() => removeSingleItem(item)}
                                                         >
-                                                            {/* <i className="fas fa-plus"></i */}
-                                                            <strong>+</strong>
-                                                        </button>
-                                                        <button className="btn px-2 btn btn-danger" onClick={() => removeSingleItem(item)} >
+                                                            <i className="fa fa-trash me-1"></i>
                                                             Remove
                                                         </button>
                                                     </div>
 
-                                                    <p className="text-start text-md-center">
-                                                        <span className="text-muted">{item.qty}</span>{" "}
-                                                        x ${item.price} ={" "}
-                                                        <span><strong>${(item?.qty || 0) * (item?.price || 0)}</strong></span>
-                                                    </p>
+                                                    {/* Price Display */}
+                                                    <div className="text-start text-md-end">
+                                                        <small className="text-muted d-block mb-1">
+                                                            {item.qty} × ${item.price?.toFixed(2)}
+                                                        </small>
+                                                        <span className="fs-5 fw-bold text-primary">
+                                                            ${((item?.qty || 0) * (item?.price || 0)).toFixed(2)}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <hr className="my-4" />
@@ -131,8 +138,6 @@ const Cart = () => {
     const state = useSelector((state: { HandleCart: Product[] }) => state?.HandleCart || []);
     const dispatch = useDispatch();
 
-    // Set up real-time listener for Firebase cart changes
-    // This will automatically update the cart when syncProductToFirebase makes changes
     useCartListener();
 
     // Also fetch cart on mount to ensure we have the latest data
