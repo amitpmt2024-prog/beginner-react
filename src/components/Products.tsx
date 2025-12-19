@@ -129,14 +129,24 @@ const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsPr
     );
 };
 
-const Products = () => {
-
-
-    const [data, setData] = useState<Product[]>([]);
-    const [filter, setFilter] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
+    // Lazy initialization: use recentViewed if available, otherwise empty array
+    const [data, setData] = useState<Product[]>(() => 
+        recentViewed && recentViewed.length > 0 ? recentViewed : []
+    );
+    const [filter, setFilter] = useState<Product[]>(() => 
+        recentViewed && recentViewed.length > 0 ? recentViewed : []
+    );
+    const [loading, setLoading] = useState<boolean>(() => 
+        !(recentViewed && recentViewed.length > 0)
+    );
 
     useEffect(() => {
+        // Only fetch if we don't have recentViewed data
+        if (recentViewed && recentViewed.length > 0) {
+            return; // No need to fetch, we already have data
+        }
+
         const controller = new AbortController();
 
         const getProducts = async () => {
@@ -152,6 +162,8 @@ const Products = () => {
             } catch (error: unknown) {
                 if (error instanceof Error && error.name === "AbortError") {
                     console.log("Request aborted");
+                } else {
+                    setLoading(false);
                 }
             }
         };
@@ -161,7 +173,7 @@ const Products = () => {
         return () => {
             controller.abort(); // cleanup
         };
-    }, []);
+    }, [recentViewed]);
 
     const filterProduct = (cat: string) => {
         const updatedList = data.filter((item: Product) => item.category === cat);
@@ -173,7 +185,7 @@ const Products = () => {
             <div className="container my-3 py-3">
                 <div className="row">
                     <div className="col-12">
-                        <h2 className="display-5 text-center">Latest Products</h2>
+                        <h2 className="display-5 text-center">{recentViewed && recentViewed.length > 0 ? "Recently Viewed Products" : "Latest Products"}</h2>
                         <hr />
                     </div>
                 </div>
