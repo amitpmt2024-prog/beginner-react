@@ -58,7 +58,7 @@ const ShowProduct = ({ product }: ProductProps) => {
                     <p className="read">
                         {product?.description}
                     </p>
-                    <button className="btn btn-outline-dark" onClick={() => {toast.success("Added to cart");addProduct(product)}}>Add to Cart</button>
+                    <button className="btn btn-outline-dark" onClick={() => { toast.success("Added to cart"); addProduct(product) }}>Add to Cart</button>
                     <Link to="/cart" className="btn btn-dark mx-3">Go to Cart</Link>
                 </div>
             </div>
@@ -114,7 +114,7 @@ const SimilarProduct = ({ similarProducts }: SimilarProductProps) => {
                                         </Link>
                                         <button
                                             className="btn btn-dark m-1"
-                                            onClick={() => {toast.success("Added to cart"); addProduct(item)}}
+                                            onClick={() => { toast.success("Added to cart"); addProduct(item) }}
                                         >
                                             Add to Cart
                                         </button>
@@ -145,6 +145,27 @@ const ProductDetails = () => {
             const data = await response.json();
             setProduct(data);
             setLoading(false);
+
+            // Store recently viewed product in localStorage
+            try {
+                const recentViewed = localStorage.getItem("recentViewed");
+                let recentViewedArray: Product[] = [];
+                
+                if (recentViewed) {
+                    recentViewedArray = JSON.parse(recentViewed);
+                }
+                recentViewedArray = recentViewedArray.filter((item: Product) => item.id !== data.id);
+                // Add current product at the beginning (most recent first)
+                recentViewedArray.unshift(data);
+                const MAX_RECENT_ITEMS = 10;
+                if (recentViewedArray.length > MAX_RECENT_ITEMS) {
+                    recentViewedArray = recentViewedArray.slice(0, MAX_RECENT_ITEMS);
+                }
+                localStorage.setItem("recentViewed", JSON.stringify(recentViewedArray));
+            } catch (error) {
+                console.error("Error saving recently viewed product:", error);
+                localStorage.setItem("recentViewed", JSON.stringify([data]));
+            }
             const response2 = await fetch(`https://fakestoreapi.com/products/category/${data.category}`);
             const data2 = await response2.json();
             setSimilarProduct(data2);
