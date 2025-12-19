@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useRef } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { signOut } from 'firebase/auth'
@@ -11,6 +12,25 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isLoggedIn = JSON.parse(localStorage.getItem('user') || 'null');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLLIElement>(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownOpen]);
 
     const handleLogout = async () => {
         try {
@@ -44,14 +64,49 @@ const Navbar = () => {
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/about">About</NavLink>
                         </li>
-                        {isLoggedIn && (
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/orders">Orders</NavLink>
-                            </li>
-                        )}
                         <li className="nav-item">
                             <NavLink className="nav-link" to="/contact">Contact</NavLink>
                         </li>
+                        {isLoggedIn && (
+                            <li className="nav-item dropdown" ref={dropdownRef}>
+                                <a 
+                                    className="nav-link dropdown-toggle" 
+                                    href="#" 
+                                    id="dropdownMenuButton1" 
+                                    role="button" 
+                                    aria-expanded={dropdownOpen}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setDropdownOpen(!dropdownOpen);
+                                    }}
+                                >
+                                    My Account
+                                </a>
+                                <ul 
+                                    className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`} 
+                                    aria-labelledby="dropdownMenuButton1"
+                                >
+                                    <li>
+                                        <NavLink 
+                                            className="dropdown-item" 
+                                            to="/my-profile"
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            My Profile
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink 
+                                            className="dropdown-item" 
+                                            to="/orders"
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            Orders
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            </li>
+                        )}
                     </ul>
                     <div className="buttons text-center">
                         <NavLink to="/cart" className="btn btn-outline-dark m-2">

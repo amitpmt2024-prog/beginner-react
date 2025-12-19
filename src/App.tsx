@@ -21,6 +21,7 @@ import PublicRoute from "./components/PublicRoute";
 import SearchBar from './components/SearchBar';
 import Checkout from './pages/Checkout';
 import OrderHistory from './pages/OrderHistory';
+import MyProfile from './pages/MyProfile';
 
 // Component to handle cart sync
 const CartSyncWrapper = () => {
@@ -49,7 +50,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
-          
+          <Route path="/my-profile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
           {/* 404 Page */}
           <Route path="*" element={<ProtectedRoute><PageNotFound /></ProtectedRoute>} />
         </Routes>
