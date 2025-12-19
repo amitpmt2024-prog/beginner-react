@@ -165,16 +165,25 @@ const Login = () => {
               <div className="my-3">
                 <p>New Here? <Link to="/register" className="text-decoration-underline text-info">Register</Link> </p>
               </div>
-               <button onClick={handleGoogleSignIn} className="google-modern-btn">
-                <img
-                  src="https://developers.google.com/identity/images/g-logo.png"
-                  alt="Google"
-                />
-                Continue with Google
-              </button>
-              <div className="text-center">
-                <button className="my-2 mx-auto btn btn-dark" type="submit">
+              <div className="d-flex flex-column flex-md-row gap-2 my-3">
+                <button 
+                  className="btn btn-dark flex-fill" 
+                  type="submit"
+                >
                   Login
+                </button>
+                <button 
+                  onClick={handleGoogleSignIn} 
+                  className="btn btn-outline-secondary flex-fill d-flex align-items-center justify-content-center gap-2"
+                  type="button"
+                >
+                  <img
+                    src="https://developers.google.com/identity/images/g-logo.png"
+                    alt="Google"
+                    width="18"
+                    height="18"
+                  />
+                  Continue with Google
                 </button>
               </div>
             </div>
