@@ -5,10 +5,6 @@ import { auth, db } from "../Firebase";
 import { loadCart } from "../redux/action";
 import type { Product } from "../types/Product.type";
 
-/**
- * Custom hook to listen to real-time cart changes from Firebase
- * Updates Redux store when Firebase cart changes
- */
 export const useCartListener = () => {
   const dispatch = useDispatch();
 
@@ -28,16 +24,10 @@ export const useCartListener = () => {
         if (snapshot.exists()) {
           const data = snapshot.data();
           const items = data.items || {};
-          // Convert object to array
           const cart: Product[] = Object.values(items) as Product[];
-          
-          // Update Redux store with Firebase data
           dispatch(loadCart(cart));
-          
-          // Also update localStorage for offline support
           localStorage.setItem("cart", JSON.stringify(cart));
         } else {
-          // Cart doesn't exist in Firebase, clear local state
           dispatch(loadCart([]));
           localStorage.removeItem("cart");
         }
