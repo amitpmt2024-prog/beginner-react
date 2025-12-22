@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot, orderBy, Timestamp } from "firebase/firestore";
 import { auth, db } from "../Firebase";
 import type { Order } from "../types/Order.type";
+import { fetchUserOrders } from "../utils/orderUtils";
 
 /**
  * Helper function to sort orders by createdAt in descending order
@@ -140,7 +141,6 @@ export const useUserOrdersOnce = () => {
             }
 
             try {
-                const { fetchUserOrders } = await import("../utils/orderUtils");
                 const ordersList = await fetchUserOrders(user.uid);
                 setOrders(ordersList);
                 setLoading(false);
