@@ -5,7 +5,8 @@ import Footer from "../components/Footer";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth } from "../Firebase";
+import { auth, db } from "../Firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import {  syncCartToFirebase } from "../redux/reducer/HandleCart";
@@ -34,9 +35,40 @@ const Login = () => {
         data.password
       );
 
+      // Load user data from Firestore to get name if it exists
+      let userName = "";
+      try {
+        const userRef = doc(db, "users", result.user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          userName = userData.name || "";
+        }
+      } catch (firestoreError) {
+        console.error("Error loading user data from Firestore:", firestoreError);
+      }
+
+      // Create or update user record in Firestore
+      try {
+        const userRef = doc(db, "users", result.user.uid);
+        await setDoc(
+          userRef,
+          {
+            email: result.user.email,
+            uid: result.user.uid,
+            isAnonymous: false,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (firestoreError) {
+        console.error("Error creating user record in Firestore:", firestoreError);
+      }
+
       const user = {
         uid: result.user.uid,
         email: result.user.email,
+        name: userName,
         accessToken: result.user.accessToken,
       };
       localStorage.setItem("user", JSON.stringify(user));
@@ -74,10 +106,42 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       
+      // Load user data from Firestore to get name if it exists
+      let userName = "";
+      try {
+        const userRef = doc(db, "users", result.user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          userName = userData.name || "";
+        }
+      } catch (firestoreError) {
+        console.error("Error loading user data from Firestore:", firestoreError);
+      }
+
+      // Create or update user record in Firestore
+      try {
+        const userRef = doc(db, "users", result.user.uid);
+        await setDoc(
+          userRef,
+          {
+            name: result.user.displayName || userName || "",
+            email: result.user.email,
+            uid: result.user.uid,
+            isAnonymous: false,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (firestoreError) {
+        console.error("Error creating user record in Firestore:", firestoreError);
+      }
+      
       // Save user info to localStorage
       const user = {
         uid: result.user.uid,
         email: result.user.email,
+        name: result.user.displayName || userName || "",
       };
       localStorage.setItem("user", JSON.stringify(user));
       
