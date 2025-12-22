@@ -3,7 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { auth } from "../Firebase";
 import { fetchCartFromFirebase } from "../redux/reducer/HandleCart";
-import { loadCart, clearCart } from "../redux/action";
+import { loadCart } from "../redux/action";
 
 /**
  * Custom hook to sync cart with Firebase
@@ -25,7 +25,7 @@ export const useCartSync = () => {
         }
       } else {
         // User is logged out - clear cart
-        dispatch(clearCart());
+        // dispatch(clearCart());
       }
     });
 
