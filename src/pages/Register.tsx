@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useForm, Controller } from "react-hook-form";
-import { createUserWithEmailAndPassword, signInAnonymously } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../Firebase";
 import toast from "react-hot-toast";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -46,7 +46,6 @@ const Register = () => {
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm<FormValues>({
     defaultValues: {
       name: "",
@@ -104,69 +103,6 @@ const Register = () => {
     } catch (error) {
       if (error instanceof Error && error.name !== "AbortError") {
         toast.error(error.message || "Registration failed");
-      }
-    }
-  };
-
-  const handleAnonymousRegister = async () => {
-    try {
-      const formData = getValues();
-      
-      // Validate name is provided
-      if (!formData.name || formData.name.trim() === "") {
-        toast.error("Please enter your name for anonymous registration");
-        return;
-      }
-
-      // Sign in anonymously
-      const result = await signInAnonymously(auth);
-      
-      // Create user record in Firestore with name
-      const userRef = doc(db, "users", result.user.uid);
-      await setDoc(
-        userRef,
-        {
-          name: formData.name,
-          email: null,
-          uid: result.user.uid,
-          isAnonymous: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        { merge: true }
-      );
-
-      // Save user info to localStorage
-      const user = {
-        uid: result.user.uid,
-        email: "",
-        name: formData.name,
-        isAnonymous: true,
-      };
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Get cart from localStorage and sync to Firebase if it exists
-      const cartData = localStorage.getItem('cart');
-      if (result.user.uid && cartData) {
-        try {
-          const cart: Product[] = JSON.parse(cartData);
-          if (cart && Array.isArray(cart) && cart.length > 0) {
-            // Sync cart to Firebase
-            await syncCartToFirebase(result.user.uid, cart);
-            // Update Redux store with the cart
-            dispatch(loadCart(cart));
-          }
-        } catch (parseError) {
-          console.error("Error parsing cart from localStorage:", parseError);
-        }
-      }
-
-      toast.success('Anonymous registration successful');
-      navigate("/");
-    } catch (error) {
-      console.error("Anonymous registration error:", error);
-      if (error instanceof Error) {
-        toast.error(error.message || "Anonymous registration failed");
       }
     }
   };
@@ -343,18 +279,6 @@ const Register = () => {
                   />
                   Continue with Google
                 </button>
-              </div>
-              <div className="my-3">
-                <button 
-                  onClick={handleAnonymousRegister} 
-                  className="btn btn-outline-info w-100"
-                  type="button"
-                >
-                  Register Anonymously
-                </button>
-                <small className="text-muted d-block mt-2">
-                  Register without email. Your name will be saved for your profile.
-                </small>
               </div>
 
             </form>
