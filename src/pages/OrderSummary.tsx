@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { Product } from "../types/Product.type";
 import { Link } from "react-router";
 
@@ -13,7 +13,11 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
         }, 0);
     }, [state]);
     
-    const [couponCode, setCouponCode] = useState("");
+    // Load coupon code from localStorage on component mount
+    const [couponCode, setCouponCode] = useState(() => {
+        const savedCoupon = localStorage.getItem("appliedCouponCode");
+        return savedCoupon || "";
+    });
     const [showCouponInfo, setShowCouponInfo] = useState(false);
 
     // Available coupon codes
@@ -66,6 +70,17 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
             };
         }
     }, [couponCode, baseSubTotal]);
+
+    // Save coupon code to localStorage when it's successfully applied
+    useEffect(() => {
+        if (appliedCoupon && !errorMessage && couponCode.trim()) {
+            // Save only when coupon is successfully applied
+            localStorage.setItem("appliedCouponCode", couponCode.trim());
+        } else if (!couponCode.trim()) {
+            // Remove from localStorage when coupon input is cleared
+            localStorage.removeItem("appliedCouponCode");
+        }
+    }, [appliedCoupon, errorMessage, couponCode]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;

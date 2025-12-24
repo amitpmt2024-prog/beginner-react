@@ -138,6 +138,9 @@ const Checkout = () => {
             // Clear the cart after successful order placement
             dispatch(clearCart());
             
+            // Clear coupon code from localStorage after successful order
+            localStorage.removeItem("appliedCouponCode");
+            
             toast.success("Order placed successfully!");
             console.log("Order created with ID: ", orderRef.id);
             navigate("/orders");
