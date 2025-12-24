@@ -13,12 +13,8 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
         }, 0);
     }, [state]);
     
-    const [discount, setDiscount] = useState(0);
     const [couponCode, setCouponCode] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
     const [showCouponInfo, setShowCouponInfo] = useState(false);
-    const [appliedCoupon, setAppliedCoupon] = useState("");
-    const subTotal = baseSubTotal - discount;
 
     // Available coupon codes
     const availableCoupons = [
@@ -30,14 +26,12 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
         return (totalItems += (item.qty ?? 0));
     })
 
-    const validateCouponCode = (code: string) => {
-        const trimmedCode = code.trim().toUpperCase().replace(/\s+/g, ' ');
+    // Calculate discount, error message, and applied coupon based on couponCode and baseSubTotal
+    const { discount, errorMessage, appliedCoupon } = useMemo(() => {
+        const trimmedCode = couponCode.trim().toUpperCase().replace(/\s+/g, ' ');
         
         if (!trimmedCode) {
-            setErrorMessage("");
-            setDiscount(0);
-            setAppliedCoupon("");
-            return;
+            return { discount: 0, errorMessage: "", appliedCoupon: "" };
         }
 
         // Normalize coupon codes for comparison
@@ -46,37 +40,39 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
         if (normalizedCode === "20%OFF" || normalizedCode === "20% OFF") {
             if (baseSubTotal > 200) {
                 const newDiscount = baseSubTotal * 0.2;
-                setDiscount(newDiscount);
-                setErrorMessage("");
-                setAppliedCoupon("20%OFF");
+                return { discount: newDiscount, errorMessage: "", appliedCoupon: "20%OFF" };
             } else {
-                setErrorMessage("Minimum order amount of $200 required for this coupon");
-                setDiscount(0);
-                setAppliedCoupon("");
+                return { 
+                    discount: 0, 
+                    errorMessage: "Minimum order amount of $200 required for this coupon(Without shipping)", 
+                    appliedCoupon: "" 
+                };
             }
         } else if (normalizedCode === "500RS OFF" || normalizedCode === "500RSOFF") {
             if (baseSubTotal > 1500) {
-                const newDiscount = 500;
-                setDiscount(newDiscount);
-                setErrorMessage("");
-                setAppliedCoupon("500RS OFF");
+                return { discount: 500, errorMessage: "", appliedCoupon: "500RS OFF" };
             } else {
-                setErrorMessage("Minimum order amount of $1500 required for this coupon");
-                setDiscount(0);
-                setAppliedCoupon("");
+                return { 
+                    discount: 0, 
+                    errorMessage: "Minimum order amount of $1500 required for this coupon(Without shipping)", 
+                    appliedCoupon: "" 
+                };
             }
         } else {
-            setErrorMessage("Invalid coupon code. Please check and try again.");
-            setDiscount(0);
-            setAppliedCoupon("");
+            return { 
+                discount: 0, 
+                errorMessage: "Invalid coupon code. Please check and try again.", 
+                appliedCoupon: "" 
+            };
         }
-    }
+    }, [couponCode, baseSubTotal]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCouponCode(value);
-        validateCouponCode(value);
     }
+
+    const subTotal = baseSubTotal - discount;
     
     return (<>
             <div className="card mb-4">
