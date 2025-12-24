@@ -74,9 +74,9 @@ const ShowCart = ({ state }: { state: Product[] }) => {
                                                     <strong>{item.title}</strong>
                                                 </div>
                                                 <div className="col-lg-4 col-md-6">
-                                                    <div className="d-flex flex-column align-items-start align-items-md-end mb-3">
+                                                    <div className="d-flex align-items-center justify-content-start justify-content-md-end gap-3 flex-wrap">
                                                         {/* Quantity Controls */}
-                                                        <div className="d-flex align-items-center mb-2">
+                                                        <div className="d-flex align-items-center">
                                                             <button
                                                                 className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
                                                                 onClick={() => removeItem(item)}
@@ -98,22 +98,22 @@ const ShowCart = ({ state }: { state: Product[] }) => {
 
                                                         {/* Remove Button */}
                                                         <button 
-                                                            className="btn btn-danger btn-sm mb-2" 
+                                                            className="btn btn-danger btn-sm" 
                                                             onClick={() => removeSingleItem(item)}
                                                         >
                                                             <i className="fa fa-trash me-1"></i>
                                                             Remove
                                                         </button>
-                                                    </div>
 
-                                                    {/* Price Display */}
-                                                    <div className="text-start text-md-end">
-                                                        <small className="text-muted d-block mb-1">
-                                                            {item.qty} × ${item.price?.toFixed(2)}
-                                                        </small>
-                                                        <span className="fs-5 fw-bold text-primary">
-                                                            ${((item?.qty || 0) * (item?.price || 0)).toFixed(2)}
-                                                        </span>
+                                                        {/* Price Display */}
+                                                        <div className="text-end">
+                                                            <small className="text-muted d-block">
+                                                                {item.qty} × ${item.price?.toFixed(2)}
+                                                            </small>
+                                                            <span className="fs-5 fw-bold text-primary">
+                                                                ${((item?.qty || 0) * (item?.price || 0)).toFixed(2)}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
