@@ -64,58 +64,55 @@ const ShowCart = ({ state }: { state: Product[] }) => {
 
                                     return (
                                         <React.Fragment key={item.id}>
-                                            <div className="row d-flex align-items-center">
-                                                <div className="col-lg-3 col-md-12">
-                                                    <div className="bg-image rounded" data-mdb-ripple-color="light">
-                                                        <img src={item.image} alt={item.title} width="100px" height="75px"></img>
-                                                    </div>
+                                            <div className="d-flex align-items-center gap-3 flex-wrap">
+                                                {/* Image */}
+                                                <div className="bg-image rounded" data-mdb-ripple-color="light">
+                                                    <img src={item.image} alt={item.title} width="100px" height="75px"></img>
                                                 </div>
-                                                <div className="col-lg-5 col-md-6">
+
+                                                {/* Title */}
+                                                <div className="flex-grow-1">
                                                     <strong>{item.title}</strong>
                                                 </div>
-                                                <div className="col-lg-4 col-md-6">
-                                                    <div className="d-flex align-items-center justify-content-start justify-content-md-end gap-3 flex-wrap">
-                                                        {/* Quantity Controls */}
-                                                        <div className="d-flex align-items-center">
-                                                            <button
-                                                                className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
-                                                                onClick={() => removeItem(item)}
-                                                                style={{ width: "36px", height: "36px" }}
-                                                            >
-                                                                <i className="fa fa-minus"></i>
-                                                            </button>
-                                                            <div className="mx-3 px-3 py-1 border rounded bg-light text-center">
-                                                                <strong>{item.qty}</strong>
-                                                            </div>
-                                                            <button
-                                                                className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
-                                                                onClick={() => addItem(item)}
-                                                                style={{ width: "36px", height: "36px" }}
-                                                            >
-                                                                <i className="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
 
-                                                        {/* Remove Button */}
-                                                        <button 
-                                                            className="btn btn-danger btn-sm" 
-                                                            onClick={() => removeSingleItem(item)}
-                                                        >
-                                                            <i className="fa fa-trash me-1"></i>
-                                                            Remove
-                                                        </button>
-
-                                                        {/* Price Display */}
-                                                        <div className="text-end">
-                                                            <small className="text-muted d-block">
-                                                                {item.qty} × ${item.price?.toFixed(2)}
-                                                            </small>
-                                                            <span className="fs-5 fw-bold text-primary">
-                                                                ${((item?.qty || 0) * (item?.price || 0)).toFixed(2)}
-                                                            </span>
-                                                        </div>
+                                                {/* Quantity Controls */}
+                                                <div className="d-flex align-items-center">
+                                                    <button
+                                                        className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
+                                                        onClick={() => removeItem(item)}
+                                                        style={{ width: "36px", height: "36px" }}
+                                                    >
+                                                        <i className="fa fa-minus"></i>
+                                                    </button>
+                                                    <div className="mx-3 px-3 py-1 border rounded bg-light text-center">
+                                                        <strong>{item.qty}</strong>
                                                     </div>
+                                                    <button
+                                                        className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center"
+                                                        onClick={() => addItem(item)}
+                                                        style={{ width: "36px", height: "36px" }}
+                                                    >
+                                                        <i className="fa fa-plus"></i>
+                                                    </button>
                                                 </div>
+
+                                                {/* Price Display */}
+                                                <div className="text-end">
+                                                    <small className="text-muted d-block">
+                                                        {item.qty} × ${item.price?.toFixed(2)}
+                                                    </small>
+                                                    <span className="fs-5 fw-bold text-primary">
+                                                        ${((item?.qty || 0) * (item?.price || 0)).toFixed(2)}
+                                                    </span>
+                                                </div>
+
+                                                {/* Remove Button - Last */}
+                                                <button 
+                                                    className="btn btn-danger btn-sm" 
+                                                    onClick={() => removeSingleItem(item)}
+                                                >
+                                                    <i className="fa fa-trash me-1"></i>
+                                                </button>
                                             </div>
                                             <hr className="my-4" />
                                         </React.Fragment>
