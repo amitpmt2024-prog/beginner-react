@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
 import { db } from "../Firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
-
+import emailjs from "@emailjs/browser";
 type ContactFormValues = {
   name: string;
   email: string;
@@ -14,6 +14,7 @@ type ContactFormValues = {
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
   const {
     register,
     handleSubmit,
@@ -37,6 +38,14 @@ const Contact = () => {
         message: data.message,
         createdAt: serverTimestamp(),
       });
+    console.log(formRef.current);
+      if (!formRef.current) return;
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
 
       toast.success("Message sent successfully! We'll get back to you soon.");
       reset(); // Clear the form after successful submission
@@ -56,7 +65,7 @@ const Contact = () => {
         <hr />
         <div className="row my-4 h-100">
           <div className="col-md-4 col-lg-4 col-sm-8 mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
               <div className="form my-3">
                 <label htmlFor="name">Name</label>
                 <input
