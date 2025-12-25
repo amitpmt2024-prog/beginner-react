@@ -87,6 +87,11 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
         setCouponCode(value);
     }
 
+    const handleRemoveCoupon = () => {
+        setCouponCode("");
+        localStorage.removeItem("appliedCouponCode");
+    }
+
     const subTotal = baseSubTotal - discount;
     
     return (<>
@@ -145,13 +150,34 @@ const OrderSummary = ({ state }: { state: Product[] }) => {
                                     </ul>
                                 </div>
                             )}
-                            <input 
-                                type="text" 
-                                className={`form-control ${errorMessage ? 'is-invalid' : appliedCoupon ? 'is-valid' : ''}`}
-                                placeholder="Enter coupon code" 
-                                value={couponCode}
-                                onChange={handleChange}
-                            />
+                            <div className="position-relative">
+                                <input 
+                                    type="text" 
+                                    className={`form-control ${errorMessage ? 'is-invalid' : appliedCoupon ? 'is-valid' : ''}`}
+                                    placeholder="Enter coupon code" 
+                                    value={couponCode}
+                                    onChange={handleChange}
+                                    style={{
+                                        paddingRight: couponCode ? "40px" : undefined
+                                    }}
+                                />
+                                {couponCode && (
+                                    <i 
+                                        className="fa fa-times position-absolute"
+                                        style={{
+                                            right: errorMessage || appliedCoupon ? "30px" : "12px",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            cursor: "pointer",
+                                            color: "#6c757d",
+                                            fontSize: "16px",
+                                            zIndex: 10
+                                        }}
+                                        onClick={handleRemoveCoupon}
+                                        title="Remove coupon code"
+                                    ></i>
+                                )}
+                            </div>
                             {errorMessage && (
                                 <div className="text-danger mt-1" style={{ fontSize: "12px" }}>
                                     <i className="fa fa-exclamation-circle me-1"></i>
