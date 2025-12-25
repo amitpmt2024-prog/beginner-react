@@ -36,7 +36,7 @@ const Loading = () => {
 }
 
 
-const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsProps) => {
+const ShowProducts = ({ filter, data, setFilter, filterProduct, searchProduct }: ShowProductsProps) => {
     const dispatch = useDispatch();
     const addProduct = (product: Product) => {
         dispatch(addCart(product));
@@ -75,6 +75,9 @@ const ShowProducts = ({ filter, data, setFilter, filterProduct }: ShowProductsPr
                 >
                     Electronics
                 </button>
+                <div className="col-md-2">
+                    <input type="text" placeholder="Search" className="form-control" onChange={(e) => searchProduct(e.target.value)} />
+                </div>
             </div>
 
             {filter.map((product: Product) => {
@@ -185,6 +188,11 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
         setFilter(updatedList);
     };
 
+    const searchProduct = (search: string) => {
+        const updatedList = data.filter((item: Product) => item.title?.toLowerCase().includes(search.toLowerCase()));
+        setFilter(updatedList);
+    };
+
     return (
         <>
             <div className="container my-3 py-3">
@@ -195,7 +203,7 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
                     </div>
                 </div>
                 <div className="row justify-content-center">
-                    {loading ? <Loading /> : <ShowProducts filter={filter} data={data} setFilter={setFilter} filterProduct={filterProduct} />}
+                    {loading ? <Loading /> : <ShowProducts filter={filter} data={data} setFilter={setFilter} filterProduct={filterProduct} searchProduct={searchProduct} />}
                 </div>
             </div>
         </>

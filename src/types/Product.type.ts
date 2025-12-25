@@ -26,4 +26,5 @@ export interface ShowProductsProps {
     data: Product[];
     setFilter: (products: Product[]) => void;
     filterProduct: (cat: string) => void;
+    searchProduct: (search: string) => void;
 }
