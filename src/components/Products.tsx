@@ -31,7 +31,6 @@ const ShowProducts = ({ filter }: { filter: Product[] }) => {
         return (
             <div className="text-center py-5">
                 <h4 className="text-muted">No products found</h4>
-                <p className="text-muted">Try adjusting your filters to see more results.</p>
             </div>
         );
     }
@@ -130,11 +129,9 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
             ratings: [],
         };
     });
-
     useEffect(() => {
-        // Only fetch if we don't have recentViewed data
         if (recentViewed && recentViewed.length > 0) {
-            return; // No need to fetch, we already have data
+            return; 
         }
 
         const controller = new AbortController();
@@ -147,7 +144,7 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
                 });
                 const json = await response.json();
                 setData(json);
-                // Update max price in filters when data is loaded
+                
                 const maxPrice = Math.max(...json.map((p: Product) => p.price || 0));
                 setFilters((prev) => ({
                     ...prev,
@@ -218,8 +215,6 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
     }, [data, filters, applyFilters]);
 
     const handleFilterChange = useCallback(() => {
-        // This function is called when filters change in ShowProducts
-        // The useMemo above will handle the actual filtering
     }, []);
 
     return (
