@@ -24,7 +24,17 @@ export interface SimilarProductProps {
 export interface ShowProductsProps {
     filter: Product[];
     data: Product[];
-    setFilter: (products: Product[]) => void;
-    filterProduct: (cat: string) => void;
-    searchProduct: (search: string) => void;
+    filters: Filters;
+    setFilters: (filters: Filters) => void;
+    onFilterChange: (filters: Filters) => void;
+}
+
+export interface Filters {
+    search: string | null;
+    categories: string[];
+    price: {
+        min: number;
+        max: number;
+    };
+    ratings: number[];
 }
