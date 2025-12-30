@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import type { Product } from "../types/Product.type";
 
 import OrderSummary from "./OrderSummary";
@@ -151,7 +152,8 @@ const Checkout = () => {
     };
     return (<>
         <Navbar />
-        <div className="container my-3 py-3">
+        <AutoBreadcrumb />
+        <div className="container py-3">
             <h1 className="text-center">Checkout</h1>
             <hr />
             <div className="container py-5">

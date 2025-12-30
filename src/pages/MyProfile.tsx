@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import toast from "react-hot-toast";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../Firebase";
@@ -213,7 +214,8 @@ const MyProfile = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-5 py-5">
+      <AutoBreadcrumb />
+      <div className="container py-5">
         <h1 className="text-center mb-4">My Profile</h1>
         <hr />
         <div className="row my-4">

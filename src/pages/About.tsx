@@ -1,11 +1,13 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 
 const About = () => {
      return (
       <>
         <Navbar />
-        <div className="container my-3 py-3">
+        <AutoBreadcrumb />
+        <div className="container py-3">
           <h1 className="text-center">About Us</h1>
           <hr />
           <p className="lead text-center">

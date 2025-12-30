@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import type { Product } from "../types/Product.type";
 import { addCart, delCart, delSingleCart } from "../redux/action";
 import React, { useEffect } from "react";
@@ -159,7 +160,8 @@ const Cart = () => {
 
     return (<>
         <Navbar />
-        <div className="container my-3 py-3">
+        <AutoBreadcrumb />
+        <div className="container py-3">
             <h1 className="text-center">Cart</h1>
             <hr />
             {state?.length > 0 ? <ShowCart state={state} /> : <EmptyCart />}

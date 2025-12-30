@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Marquee from "react-fast-marquee";
@@ -178,6 +179,7 @@ const ProductDetails = () => {
     return (
         <>
             <Navbar />
+            <AutoBreadcrumb productCategory={product?.category} />
             <div className="container">
                 <div className="row">{loading ? <Loading /> : <ShowProduct product={product} />}</div>
                 <div className="row my-5 py-5">

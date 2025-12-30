@@ -1,6 +1,7 @@
 import { useUserOrders } from "../hooks/useUserOrders";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import type { Order } from "../types/Order.type";
 import { Timestamp } from "firebase/firestore";
 
@@ -74,6 +75,7 @@ const OrderHistory = () => {
     return (
         <>
             <Navbar />
+            <AutoBreadcrumb />
             <div className="container my-5">
                 <h1 className="text-center mb-4">Order History</h1>
                 

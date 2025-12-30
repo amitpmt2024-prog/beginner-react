@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import { useForm, Controller } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../Firebase";
@@ -166,7 +167,8 @@ const Register = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-3 py-3">
+      <AutoBreadcrumb />
+      <div className="container py-3">
         <h1 className="text-center">Register</h1>
         <hr />
         <div className="row my-4 h-100">

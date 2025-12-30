@@ -2,6 +2,7 @@
 import { Link, useNavigate, useLocation } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
@@ -175,8 +176,9 @@ const Login = () => {
   return (
     <>
       <Navbar />
+      <AutoBreadcrumb />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="container my-3 py-3">
+        <div className="container py-3">
           <h1 className="text-center">Login</h1>
           <hr />
           <div className="row my-4 h-100">

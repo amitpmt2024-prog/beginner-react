@@ -37,8 +37,6 @@ const Footer = () => {
   const infoLinks = [
     { path: "/about", label: "About Us" },
     { path: "/contact", label: "Contact Us" },
-    { path: "/my-profile", label: "My Profile" },
-    { path: "/orders", label: "Order History" },
   ];
 
   return (

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import AutoBreadcrumb from "../components/AutoBreadcrumb";
 import { useForm } from "react-hook-form";
 import { db } from "../Firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -60,7 +61,8 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <div className="container my-3 py-3">
+      <AutoBreadcrumb />
+      <div className="container py-3">
         <h1 className="text-center">Contact Us</h1>
         <hr />
         <div className="row my-4 h-100">
