@@ -108,7 +108,7 @@ const ShowProducts = ({ filter }: { filter: Product[] }) => {
     );
 };
 
-const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
+const Products = ({ recentViewed, initialCategory }: { recentViewed: Product[]; initialCategory?: string }) => {
     // Lazy initialization: use recentViewed if available, otherwise empty array
     const [data, setData] = useState<Product[]>(() =>
         recentViewed && recentViewed.length > 0 ? recentViewed : []
@@ -124,7 +124,7 @@ const Products = ({ recentViewed }: { recentViewed: Product[] }) => {
             : 1000;
         return {
             search: null,
-            categories: [],
+            categories: initialCategory ? [initialCategory] : [],
             price: { min: 0, max: maxPrice },
             ratings: [],
         };
