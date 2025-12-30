@@ -63,7 +63,7 @@ const ProductCategories = () => {
                 </div>
             </div>
             <div className="row">
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                     <div key={category} className="col-md-6 col-lg-3 mb-4">
                         <div
                             className="card h-100 shadow-sm category-card"
