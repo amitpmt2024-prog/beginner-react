@@ -49,7 +49,6 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
 
     // Handle product detail page
     if (location.pathname.startsWith("/product/") && params.id) {
-        items.push({ label: "Products", path: "/product" });
         if (productCategory) {
             const formattedCategory = productCategory
                 .split("'")
@@ -59,6 +58,8 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
                 label: formattedCategory, 
                 path: `/product?category=${encodeURIComponent(productCategory)}` 
             });
+        } else {
+            items.push({ label: "Products", path: "/product" });
         }
         items.push({ label: productName || "Product Details" });
     }
@@ -70,7 +71,6 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
                 .split("'")
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join("'");
-            items.push({ label: "Products", path: "/product" });
             items.push({ label: formattedCategory });
         } else {
             items.push({ label: "Products" });

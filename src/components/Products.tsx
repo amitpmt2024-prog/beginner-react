@@ -222,7 +222,7 @@ const Products = ({ recentViewed, initialCategory }: { recentViewed: Product[]; 
             <div className="row">
                 <div className="col-12">
                     <h2 className="display-5 text-center">
-                        {recentViewed && recentViewed.length > 0 ? "Recently Viewed Products" : "Latest Products"}
+                        {recentViewed && recentViewed.length > 0 ? "Recently Viewed Products" : "Products"}
                     </h2>
                     {!loading && (
                         <p className="text-center text-muted mb-4">
