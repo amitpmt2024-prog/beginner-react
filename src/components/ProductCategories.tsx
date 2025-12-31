@@ -38,7 +38,7 @@ const ProductCategories = () => {
 
     if (loading) {
         return (
-            <div className="container my-5 py-5">
+            <div className="container">
                 <div className="row">
                     <div className="col-12 mb-4">
                         <Skeleton height={40} />
@@ -54,7 +54,7 @@ const ProductCategories = () => {
     }
 
     return (
-        <div className="container my-5 py-5">
+        <div className="container">
             <div className="row">
                 <div className="col-12 text-center mb-5">
                     <h2 className="display-5">Shop by Category</h2>

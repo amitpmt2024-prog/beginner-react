@@ -14,7 +14,7 @@ const Main = () => {
         <div className="slide-container">
           <Zoom scale={0.4}>
             {
-              images.map((each, index) => <img key={index} style={{ width: "50%", height: "500px",margin:"auto",display:"block" }} src={each} />)
+              images.map((each, index) => <img key={index} style={{ width: "50%", height: "500px", margin: "20px auto", display: "block" }} src={each} />)
             }
           </Zoom>
         </div>
