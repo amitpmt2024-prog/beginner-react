@@ -38,12 +38,14 @@ const Login = () => {
 
       // Load user data from Firestore to get name if it exists
       let userName = "";
+      let userProfileImg = "";
       try {
         const userRef = doc(db, "users", result.user.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           const userData = userSnap.data();
           userName = userData.name || "";
+          userProfileImg = userData.photoURL || "";
         }
       } catch (firestoreError) {
         console.error("Error loading user data from Firestore:", firestoreError);
@@ -70,6 +72,7 @@ const Login = () => {
         uid: result.user.uid,
         email: result.user.email,
         name: userName,
+        photoURL: userProfileImg,
         accessToken: result.user.accessToken,
       };
       localStorage.setItem("user", JSON.stringify(user));
@@ -109,12 +112,16 @@ const Login = () => {
       
       // Load user data from Firestore to get name if it exists
       let userName = "";
+      let userProfileImg = "";
       try {
+        console.log('result', result.user);
         const userRef = doc(db, "users", result.user.uid);
         const userSnap = await getDoc(userRef);
+        console.log('userSnap', userSnap);
         if (userSnap.exists()) {
           const userData = userSnap.data();
           userName = userData.name || "";
+          userProfileImg = userData.photoURL || "";
         }
       } catch (firestoreError) {
         console.error("Error loading user data from Firestore:", firestoreError);
@@ -127,6 +134,7 @@ const Login = () => {
           userRef,
           {
             name: result.user.displayName || userName || "",
+            photoURL: result.user.photoURL || userProfileImg || "",
             email: result.user.email,
             uid: result.user.uid,
             isAnonymous: false,
@@ -143,6 +151,7 @@ const Login = () => {
         uid: result.user.uid,
         email: result.user.email,
         name: result.user.displayName || userName || "",
+        photoURL: result.user.photoURL || userProfileImg || "", 
       };
       localStorage.setItem("user", JSON.stringify(user));
       
