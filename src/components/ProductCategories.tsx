@@ -36,6 +36,20 @@ const ProductCategories = () => {
             .join("'");
     };
 
+    const getCategoryImage = (category: string) => {
+        if (category === "jewelery") {
+            return "/assets/jewelery.jpg";
+        } else if (category === "electronics") {
+            return "/assets/electronics.jpg";
+        } else if (category === "men's clothing") { 
+            return "/assets/men's clothing.jpg";
+        } else if (category === "women's clothing") {
+            return "/assets/women's clothing.jpg";
+        }
+        // Default image or fallback for other categories
+        return "/assets/9772130.jpg";
+    };
+
     if (loading) {
         return (
             <div className="container">
@@ -83,7 +97,16 @@ const ProductCategories = () => {
                         >
                             <div className="card-body text-center d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "200px" }}>
                                 <div className="mb-3">
-                                    <i className="fas fa-tag fa-3x text-primary"></i>
+                                    <img 
+                                        src={getCategoryImage(category)} 
+                                        alt={formatCategoryName(category)}
+                                        style={{ 
+                                            width: "100px", 
+                                            height: "100px", 
+                                            objectFit: "cover",
+                                            borderRadius: "8px"
+                                        }}
+                                    />
                                 </div>
                                 <h5 className="card-title mb-0">{formatCategoryName(category)}</h5>
                                 <p className="text-muted small mt-2 mb-0">Click to explore</p>

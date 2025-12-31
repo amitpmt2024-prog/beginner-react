@@ -2,9 +2,9 @@ import { Zoom } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 
 const images = [
-  'https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png',
-  'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png',
-  'https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png'
+  '/assets/9772130.jpg',
+  '/assets/fashion-collection-design-shopping-graphic-words.jpg',
+  '/assets/2871017.jpg' // Using available image - replace with third image when available
 ];
 
 const Main = () => {
@@ -14,7 +14,7 @@ const Main = () => {
         <div className="slide-container">
           <Zoom scale={0.4}>
             {
-              images.map((each, index) => <img key={index} style={{ width: "50%", height: "500px", margin: "20px auto", display: "block" }} src={each} />)
+              images.map((each, index) => <img key={index} style={{ width: "100%", height: "700px", margin: "auto", display: "block" }} src={each} />)
             }
           </Zoom>
         </div>
