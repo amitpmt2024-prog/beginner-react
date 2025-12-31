@@ -95,14 +95,14 @@ const ProductCategories = () => {
                                 e.currentTarget.style.boxShadow = "0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)";
                             }}
                         >
-                            <div className="card-body text-center d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "200px" }}>
+                            <div className="card-body text-center d-flex flex-column justify-content-center align-items-center" style={{ minHeight: "250px" }}>
                                 <div className="mb-3">
                                     <img 
                                         src={getCategoryImage(category)} 
                                         alt={formatCategoryName(category)}
                                         style={{ 
-                                            width: "100px", 
-                                            height: "100px", 
+                                            width: "150px", 
+                                            height: "150px", 
                                             objectFit: "cover",
                                             borderRadius: "8px"
                                         }}
