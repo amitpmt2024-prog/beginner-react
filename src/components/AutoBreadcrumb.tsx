@@ -1,5 +1,6 @@
 import { useLocation, Link } from "react-router";
 import { useParams, useSearchParams } from "react-router";
+import { useState, useEffect } from "react";
 
 interface AutoBreadcrumbProps {
     productCategory?: string;
@@ -9,6 +10,7 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
     const location = useLocation();
     const params = useParams();
     const [searchParams] = useSearchParams();
+    const [productName, setProductName] = useState<string>("");
 
     // Route name mapping
     const routeNames: Record<string, string> = {
@@ -22,6 +24,23 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
         "/orders": "Order History",
         "/my-profile": "My Profile",
     };
+
+    // Fetch product name when on product detail page
+    useEffect(() => {
+        if (location.pathname.startsWith("/product/") && params.id) {
+            const fetchProductName = async () => {
+                try {
+                    const response = await fetch(`https://fakestoreapi.com/products/${params.id}`);
+                    const data = await response.json();
+                    setProductName(data.title || "Product Details");
+                } catch (error) {
+                    console.error("Error fetching product name:", error);
+                    setProductName("Product Details");
+                }
+            };
+            fetchProductName();
+        }
+    }, [location.pathname, params.id]);
 
     // Build breadcrumb items
     const items: Array<{ label: string; path?: string }> = [
@@ -41,7 +60,7 @@ const AutoBreadcrumb = ({ productCategory }: AutoBreadcrumbProps = {}) => {
                 path: `/product?category=${encodeURIComponent(productCategory)}` 
             });
         }
-        items.push({ label: "Product Details" });
+        items.push({ label: productName || "Product Details" });
     }
     // Handle products page with category
     else if (location.pathname === "/product") {
